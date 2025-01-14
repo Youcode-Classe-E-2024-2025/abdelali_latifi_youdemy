@@ -7,10 +7,6 @@ class Course {
     public function __construct() {
         $database = new Database();
         $this->db = $database->getConnection();
-
-        if ($this->db === null) {
-            throw new Exception("La connexion à la base de données a échoué.");
-        }
     }
 
     public function getAllCourses() {

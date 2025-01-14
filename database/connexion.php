@@ -1,10 +1,9 @@
 <?php
 class Database {
     private $host = 'localhost';
-    private $db_name = 'youdemy'; // Vérifiez ce nom
-    private $username = 'root'; // Modifiez si nécessaire
-    private $password = ''; // Modifiez si nécessaire
-    public $conn;
+    private $db_name = 'youdemy'; 
+    private $username = 'root'; 
+    private $password = '';     public $conn;
 
     public function getConnection() {
         $this->conn = null;
