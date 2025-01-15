@@ -40,6 +40,7 @@ class login extends Database {
         $conn = $this->getConnection();
         $query = "select * from users where name = :name";
         $stmt = $conn->prepare($query);
+        $stmt->bindParam(':name', $name);
         $stmt->execute();
 
         if($stmt->rowCount() > 0){
@@ -54,13 +55,13 @@ class login extends Database {
 
                 switch ($row['role']){
                     case 'Student':
-                        header('location: ..........');
+                        header('location: ../../public/student.php');
                         break;
                     case 'Teacher':
-                    header('location: ..........');
+                    header('location: ../../public/teacher.php');
                     break;
                     case 'Administrator':
-                    header('location: ..........');
+                    header('location: ../../public/administor.php');
                     break;    
         }
         exit;

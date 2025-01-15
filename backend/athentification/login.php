@@ -1,6 +1,7 @@
 <?php
 
 require_once '../athentification/athen.php';
+session_start();
 
 $login = new login();
 $error = '';
@@ -16,7 +17,6 @@ if(isset($_POST['submit'])){
         try{
 
             $result = $login->login($name, $password);
-
             if($result === 10){
                 $error = 'incorrect password';
             }elseif($result == 100){
