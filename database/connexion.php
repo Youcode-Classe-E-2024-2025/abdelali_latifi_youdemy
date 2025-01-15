@@ -3,7 +3,8 @@ class Database {
     private $host = 'localhost';
     private $db_name = 'youdemy'; 
     private $username = 'root'; 
-    private $password = '';     public $conn;
+    private $password = '';     
+    public $conn;
 
     public function getConnection() {
         $this->conn = null;

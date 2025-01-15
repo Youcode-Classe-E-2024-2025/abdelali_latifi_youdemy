@@ -76,7 +76,7 @@ $courses = $page->getCourses();
         <div class="bg-white rounded-lg shadow-lg w-full max-w-md relative">
             <div class="px-6 py-4">
                 <h3 class="text-xl font-bold text-gray-800">Log In</h3>
-                <form action="login.php" method="POST" class="mt-4">
+                <form action="../backend/athentification/login.php" method="POST" class="mt-4">
                     <div>
                         <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
                         <input type="email" name="email" id="email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
@@ -95,30 +95,37 @@ $courses = $page->getCourses();
     </div>
     <!-- Register Modal -->
     <div id="registerModal" class="hidden flex fixed inset-0 bg-gray-900 bg-opacity-50 justify-center items-center z-50">
-        <div class="bg-white rounded-lg shadow-lg w-full max-w-md relative">
-            <div class="px-6 py-4">
-                <h3 class="text-xl font-bold text-gray-800">Sign Up</h3>
-                <form action="register.php" method="POST" class="mt-4">
-                    <div>
-                        <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
-                        <input type="text" name="name" id="name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <div class="mt-4">
-                        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                        <input type="email" name="email" id="email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <div class="mt-4">
-                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                        <input type="password" name="password" id="password" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <div class="mt-6">
-                        <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700">Sign Up</button>
-                    </div>
-                </form>
-            </div>
-            <button onclick="toggleModal('registerModal')" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">&times;</button>
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-md relative">
+        <div class="px-6 py-4">
+            <h3 class="text-xl font-bold text-gray-800">Sign Up</h3>
+            <form action="../backend/athentification/signup.php" method="POST" class="mt-4">
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
+                    <input type="text" name="name" id="name" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div class="mt-4">
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" name="email" id="email" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div class="mt-4">
+                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <input type="password" name="password" id="password" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div class="mt-4">
+                    <label for="role" class="block text-sm font-medium text-gray-700">Role</label>
+                    <select name="role" id="role" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        <option value="student">Student</option>
+                        <option value="teacher">Teacher</option>
+                    </select>
+                </div>
+                <div class="mt-6">
+                    <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700">Sign Up</button>
+                </div>
+            </form>
         </div>
+        <button onclick="toggleModal('registerModal')" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">&times;</button>
     </div>
+</div>
 <script src="../js/visitor.js" ></script>
 </body>
 </html>
