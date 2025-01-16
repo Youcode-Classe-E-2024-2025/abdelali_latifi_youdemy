@@ -54,12 +54,7 @@ $courses = $page->getCourses();
                                     Category: <?= htmlspecialchars($course['category_name']) ?>
                                 </span>
                                 <div class="mt-4">
-                                    <form action="./course-details.php" method="GET">
-                                        <input type="hidden" name="course_id" value="<?= htmlspecialchars($course['course_id']) ?>">
-                                        <button type="submit" class="text-blue-600 font-medium hover:underline">
-                                            View Details
-                                        </button>
-                                    </form>
+                                <a href="course-details.php?id=<?= htmlspecialchars($course['course_id']) ?>" class="text-blue-600 font-medium hover:underline">View Details</a>
                                 </div>
                             </div>
                         </div>

@@ -1,7 +1,6 @@
 <?php
 require_once '../backend/visitor.php';
 
-// Récupération de l'ID depuis l'URL
 $course_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
 if ($course_id === 0) {
@@ -36,13 +35,13 @@ try {
             <strong>Category:</strong> <?= htmlspecialchars($courseDetails['category_name'] ?? 'Uncategorized') ?>
         </p>
         <p class="text-gray-700 mt-4">
-            <?= nl2br(htmlspecialchars($courseDetails['description'])) ?>
+            <strong>Description:</strong> <?= nl2br(htmlspecialchars($courseDetails['description'])) ?>
         </p>
         <div class="mt-6">
             <h2 class="text-xl font-semibold text-gray-800">Course Content</h2>
             <p class="mt-2 text-gray-700"><?= nl2br(htmlspecialchars($courseDetails['content'])) ?></p>
         </div>
-        <a href="student-dashboard.php" class="mt-4 inline-block bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700">
+            <a href="student-dashboard.php" class="mt-4 inline-block bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700">
             Back to Courses
         </a>
     </div>

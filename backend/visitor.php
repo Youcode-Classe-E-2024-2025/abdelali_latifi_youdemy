@@ -24,34 +24,21 @@ class Visitor {
     }
 
     public function getCourseDetails($course_id) {
-        if (!$this->db) {
-            throw new Exception("Database connection not initialized.");
-        }
-    
         $query = "SELECT courses.course_id, 
                          courses.title, 
                          courses.description, 
                          courses.content, 
-                         courses.created_at, 
                          categories.name AS category_name 
                   FROM courses 
                   LEFT JOIN categories ON courses.category_id = categories.category_id 
                   WHERE courses.course_id = :course_id";
+    
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':course_id', $course_id, PDO::PARAM_INT);
+        $stmt->execute();
     
-        $visitor = new Visitor();
-
-        try {
-            $courseDetails = $visitor->getCourseDetails($course_id);
-            if (!$courseDetails) {
-                echo "No course found for ID: " . htmlspecialchars($course_id);
-                die();
-            }
-        } catch (Exception $e) {
-            die("Error: " . $e->getMessage());
-}
-
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+    
     
 }
