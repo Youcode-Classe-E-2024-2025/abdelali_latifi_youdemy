@@ -12,28 +12,28 @@ if(isset($_POST['submit'])){
 
     if(empty($name) || empty($email) || empty($password) || empty($role)){
         $message = 'All fields are required.';
-        echo $result ;
+        header('location: ../../public/index.php');
 
     }elseif(preg_match('/[0-9]/', $name)){
         $message = 'the name cannot cantain numbers .';
-        echo $result ;
+        header('location: ../../public/index.php');
 
     }
     
     elseif(!filter_var($email, FILTER_VALIDATE_EMAIL)){
         $message = 'invalid email addrese .';
-        echo $result ;
+        header('location: ../../public/index.php');
 
     }
     else{
         $result = $registre-> registration($name, $email, $password, $role);
-        echo $result ;
         if($result == 1){
             $message = 'Registration successful';
+            header('location: ../../public/index.php');
         }
         elseif($result == 500){
             $message = 'name or email has already been taken';
-            echo $message ;
+            header('location: ../../public/index.php');
         }
         }
     }

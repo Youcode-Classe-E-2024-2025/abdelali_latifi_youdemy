@@ -19,8 +19,12 @@ if(isset($_POST['submit'])){
             $result = $login->login($name, $password);
             if($result === 10){
                 $error = 'incorrect password';
+                header('location: ../../public/index.php');
+
             }elseif($result == 100){
                 $error = 'user not found';
+                header('location: ../../public/index.php');
+
             }
         } catch (Exception $e) {
             error_log("Login error: " . $e->getMessage());
