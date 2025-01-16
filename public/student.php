@@ -18,10 +18,13 @@ $courses = $page->getCourses();
             <div class="flex justify-between items-center h-16">
                 <a href="#" class="text-xl font-bold text-blue-600 hover:text-blue-800">Student Dashboard</a>
                 <div>
-                    <button onclick="window.location.href='../logout.php'" class="text-white bg-red-600 px-4 py-2 rounded-md hover:bg-red-700">
+                    <a href="../backend/athentification/logout.php">
+                    <button  class="text-white bg-red-600 px-4 py-2 rounded-md hover:bg-red-700"> 
                         Log Out
                     </button>
+                    </a>
                 </div>
+               
             </div>
         </div>
     </nav>
@@ -51,9 +54,12 @@ $courses = $page->getCourses();
                                     Category: <?= htmlspecialchars($course['category_name']) ?>
                                 </span>
                                 <div class="mt-4">
-                                    <button onclick="toggleModal('loginModal')" class="text-blue-600 font-medium hover:underline">
-                                        View Details
-                                    </button>
+                                    <form action="./course-details.php" method="GET">
+                                        <input type="hidden" name="course_id" value="<?= htmlspecialchars($course['course_id']) ?>">
+                                        <button type="submit" class="text-blue-600 font-medium hover:underline">
+                                            View Details
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
