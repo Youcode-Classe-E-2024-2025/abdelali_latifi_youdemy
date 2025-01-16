@@ -29,21 +29,28 @@ try {
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100">
-    <div class="max-w-4xl mx-auto px-4 py-10 bg-white shadow-md rounded-lg">
-        <h1 class="text-3xl font-bold text-gray-800"><?= htmlspecialchars($courseDetails['title']) ?></h1>
-        <p class="text-sm text-gray-600 mt-2">
+    <div class="max-w-4xl mx-auto px-6 py-10 bg-white shadow-lg rounded-lg mt-16">
+        <h1 class="text-4xl font-bold text-blue-600 text-center"><?= htmlspecialchars($courseDetails['title']) ?></h1>
+        <p class="text-center text-gray-500 mt-2">
             <strong>Category:</strong> <?= htmlspecialchars($courseDetails['category_name'] ?? 'Uncategorized') ?>
         </p>
-        <p class="text-gray-700 mt-4">
-            <strong>Description:</strong> <?= nl2br(htmlspecialchars($courseDetails['description'])) ?>
-        </p>
         <div class="mt-6">
-            <h2 class="text-xl font-semibold text-gray-800">Course Content</h2>
-            <p class="mt-2 text-gray-700"><?= nl2br(htmlspecialchars($courseDetails['content'])) ?></p>
+            <h2 class="text-2xl font-semibold text-gray-800">Description</h2>
+            <p class="mt-2 text-gray-700 leading-relaxed">
+                <?= nl2br(htmlspecialchars($courseDetails['description'])) ?>
+            </p>
         </div>
-            <a href="student-dashboard.php" class="mt-4 inline-block bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700">
-            Back to Courses
-        </a>
+        <div class="mt-6">
+            <h2 class="text-2xl font-semibold text-gray-800">Course Content</h2>
+            <p class="mt-2 text-gray-700 leading-relaxed">
+                <?= nl2br(htmlspecialchars($courseDetails['content'])) ?>
+            </p>
+        </div>
+        <div class="text-center mt-10">
+            <a href="student-dashboard.php" class="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                Back to Courses
+            </a>
+        </div>
     </div>
 </body>
 </html>
