@@ -47,7 +47,7 @@ try {
             </p>
         </div>
         <div class="text-center mt-10">
-            <a href="student-dashboard.php" class="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
+            <a href="student.php" class="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
                 Back to Courses
             </a>
         </div>

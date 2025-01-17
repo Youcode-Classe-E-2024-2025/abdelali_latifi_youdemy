@@ -1,7 +1,20 @@
 <?php
 require_once '../backend/visitor.php'; 
+require_once '../backend/courses.php';
+
 $page = new Visitor();
-$courses = $page->getCourses(); 
+$page = new Visitor();
+$courseManeger = new Course();
+
+$searchKeyword = isset($_GET['search']) ? htmlspecialchars(trim($_GET['search'])) : '' ;
+
+try{
+    $courses = $searchKeyword ? $courseManeger->searchCourses($searchKeyword) : $courseManeger->getAllCourses();
+    }catch(Exception $e){
+
+    die ("erreur" .$e->getMessage());
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,10 +42,24 @@ $courses = $page->getCourses();
         </div>
     </nav>
     <!-- Hero Section -->
-    <header class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white py-10">
+    <header class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white py-16">
         <div class="max-w-7xl mx-auto px-4 text-center">
-            <h1 class="text-4xl font-extrabold">Welcome to Your Dashboard</h1>
-            <p class="text-lg font-medium mt-2">Explore and learn with the best courses tailored for you.</p>
+            <h1 class="text-4xl font-extrabold mb-4">Welcome to Your Dashboard</h1>
+            <p class="text-lg font-medium mb-6">Explore and learn with the best courses tailored for you.</p>
+            <form method="GET" class="mt-6 flex text-black justify-center">
+                <input 
+                    type="text" 
+                    name="search" 
+                    placeholder="Search courses by keyword..." 
+                    value="<?= htmlspecialchars($searchKeyword) ?>" 
+                    class="px-4 py-2 rounded-l-md border border-gray-300 focus:ring-blue-500 focus:border-blue-500 w-80"
+                />
+                <button 
+                    type="submit" 
+                    class="bg-blue-600 px-4 py-2 rounded-r-md hover:bg-blue-700">
+                    Search
+                </button>
+            </form>
         </div>
     </header>
     <!-- Courses Section -->

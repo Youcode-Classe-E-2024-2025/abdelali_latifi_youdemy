@@ -1,7 +1,18 @@
 <?php
 require_once '../backend/visitor.php';
+require_once '../backend/courses.php';
+
 $page = new Visitor();
-$courses = $page->getCourses();
+$courseManeger = new Course();
+
+$searchKeyword = isset($_GET['search']) ? htmlspecialchars(trim($_GET['search'])) : '' ;
+
+try{
+    $courses = $searchKeyword ? $courseManeger->searchCourses($searchKeyword) : $courseManeger->getAllCourses();
+    }catch(Exception $e){
+
+    die ("erreur" .$e->getMessage());
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -12,34 +23,41 @@ $courses = $page->getCourses();
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100">
-    <!-- Navbar -->
-    <nav class="bg-white shadow sticky top-0 z-50">
+   <!-- Navbar -->
+   <nav class="bg-white shadow sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <a href="#" class="text-xl font-bold text-blue-600 hover:text-blue-800">
-                    Youdemy
-                </a>
+                <a href="#" class="text-xl font-bold text-blue-600 hover:text-blue-800">Youdemy</a>
                 <div class="flex items-center space-x-4">
                     <button onclick="toggleModal('loginModal')" class="text-gray-700 hover:text-blue-600">Log In</button>
-                    <button onclick="toggleModal('registerModal')" class="text-white bg-blue-600 px-4 py-2 rounded-md hover:bg-blue-700">
-                        Sign Up
-                    </button>
+                    <button onclick="toggleModal('registerModal')" class="text-white bg-blue-600 px-4 py-2 rounded-md hover:bg-blue-700">Sign Up</button>
                 </div>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <header class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white py-20">
+    <header class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white py-16">
         <div class="max-w-7xl mx-auto px-4 text-center">
             <h1 class="text-4xl font-extrabold mb-4">Discover the Joy of Learning</h1>
             <p class="text-lg font-medium mb-6">Explore hundreds of high-quality courses created by passionate instructors.</p>
-            <button onclick="toggleModal('registerModal')" class="bg-white text-blue-600 px-6 py-3 rounded-md font-semibold hover:bg-gray-100">
-                Get Started for Free
-            </button>
+            <form method="GET" class="mt-6 flex text-black justify-center">
+                <input 
+                    type="text" 
+                    name="search" 
+                    placeholder="Search courses by keyword..." 
+                    value="<?= htmlspecialchars($searchKeyword) ?>" 
+                    class="px-4 py-2 rounded-l-md border border-gray-300 focus:ring-blue-500 focus:border-blue-500 w-80"
+                />
+                <button 
+                    type="submit" 
+                    class="bg-blue-600 px-4 py-2 rounded-r-md hover:bg-blue-700">
+                    Search
+                </button>
+            </form>
         </div>
     </header>
-    <!-- Courses Section -->
+
     <main class="py-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-3xl font-bold text-gray-700 mb-6">Featured Courses</h2>
@@ -58,20 +76,19 @@ $courses = $page->getCourses();
                                     Category: <?= htmlspecialchars($course['category_name']) ?>
                                 </span>
                                 <div class="mt-4">
-                                    <button onclick="toggleModal('loginModal')" class="text-blue-600 font-medium hover:underline">
+                                    <a href="course-details.php?id=<?= htmlspecialchars($course['course_id']) ?>" class="text-blue-600 font-medium hover:underline">
                                         View Details
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     <?php endforeach; ?>
                 <?php else: ?>
-                    <p class="text-gray-600">No courses available at the moment. Please check back later.</p>
+                    <p class="text-gray-600">No courses found for "<strong><?= htmlspecialchars($searchKeyword) ?></strong>".</p>
                 <?php endif; ?>
             </div>
         </div>
-    </main>
-    <!-- Login Modal -->
+    </main>   <!-- Login Modal -->
     <div id="loginModal" class="hidden flex fixed inset-0 bg-gray-900 bg-opacity-50 justify-center items-center z-50">
         <div class="bg-white rounded-lg shadow-lg w-full max-w-md relative">
             <div class="px-6 py-4">
