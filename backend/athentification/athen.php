@@ -58,7 +58,7 @@ class login extends Database {
                         header('location: ../../public/student.php');
                         break;
                     case 'Teacher':
-                    header('location: ../../public/teacher.php');
+                    header('location: ../../public/dashbord-teacher.php');
                     break;
                     case 'Administrator':
                     header('location: ../../public/administor.php');
