@@ -2,7 +2,7 @@
 require_once '../backend/courses.php';
 require_once '../backend/teacher.php';
 
-$courseManager = new Teacher();
+$courseManager = new Enseignant();
 
 $teacher_id = 1; 
 
@@ -44,7 +44,7 @@ $stats = $courseManager->getCourseStatistics($teacher_id);
             <div class="flex justify-between items-center h-16">
                 <a href="#" class="text-xl font-bold text-blue-600 hover:text-blue-800">Youdemy</a>
                 <div class="flex items-center space-x-4">
-                    <a href="../logout.php" class="text-gray-700 hover:text-blue-600">Log Out</a>
+                    <a href="../backend/athentification/logout.php" class="text-gray-700 hover:text-blue-600">Log Out</a>
                 </div>
             </div>
         </div>
@@ -100,9 +100,9 @@ $stats = $courseManager->getCourseStatistics($teacher_id);
                         <select name="category" id="category" required
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
                             <option value="">Select a category</option>
-                            <!-- Categories should be dynamically fetched -->
-                            <option value="1">Programming</option>
-                            <option value="2">Design</option>
+                            <?php foreach ($categories as $category): ?>
+                                <option value="<?= $category['id'] ?>"><?= htmlspecialchars($category['name']) ?></option>
+                            <?php endforeach; ?>
                         </select>
                     </div>
 
@@ -133,7 +133,7 @@ $stats = $courseManager->getCourseStatistics($teacher_id);
                                     <td class="border border-gray-300 px-4 py-2"><?= htmlspecialchars($course['category_name']) ?></td>
                                     <td class="border border-gray-300 px-4 py-2">
                                         <a href="edit-course.php?id=<?= htmlspecialchars($course['course_id']) ?>" class="text-blue-600 hover:underline">Edit</a> |
-                                        <a href="delete-course.php?id=<?= htmlspecialchars($course['course_id']) ?>" class="text-red-600 hover:underline">Delete</a>
+                                        <a href="delete-course.php?id=<?= htmlspecialchars($course['course_id']) ?>" class="text-red-600 hover:underline" onclick="return confirm('Are you sure you want to delete this course?')">Delete</a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

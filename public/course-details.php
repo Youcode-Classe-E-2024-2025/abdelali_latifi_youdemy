@@ -1,13 +1,13 @@
 <?php
-require_once '../backend/visitor.php';
+require_once '../backend/student.php';
 
-$course_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+$course_id = isset($_GET['id']) && is_numeric($_GET['id']) && $_GET['id'] > 0 ? (int)$_GET['id'] : 0;
 
 if ($course_id === 0) {
     die("Invalid course ID.");
 }
 
-$visitor = new Visitor();
+$visitor = new Etudiant();
 
 try {
     $courseDetails = $visitor->getCourseDetails($course_id);
@@ -47,8 +47,13 @@ try {
             </p>
         </div>
         <div class="text-center mt-10">
-            <a href="student.php" class="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
+            <a href="dashbord-student.php" class="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
                 Back to Courses
+            </a>
+        </div>
+        <div class="text-center mt-6">
+            <a href="register-course.php?id=<?= $course_id ?>" class="bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400">
+                Enroll in this Course
             </a>
         </div>
     </div>

@@ -1,17 +1,16 @@
 <?php
-require_once '../backend/visitor.php';
+require_once '../backend/student.php';
 require_once '../backend/courses.php';
 
-$page = new Visitor();
+$page = new Etudiant();
 $courseManeger = new Course();
 
 $searchKeyword = isset($_GET['search']) ? htmlspecialchars(trim($_GET['search'])) : '' ;
 
-try{
+try {
     $courses = $searchKeyword ? $courseManeger->searchCourses($searchKeyword) : $courseManeger->getAllCourses();
-    }catch(Exception $e){
-
-    die ("erreur" .$e->getMessage());
+} catch(Exception $e) {
+    die("Erreur lors de la récupération des cours : " . $e->getMessage());
 }
 ?>
 <!DOCTYPE html>
@@ -88,7 +87,9 @@ try{
                 <?php endif; ?>
             </div>
         </div>
-    </main>   <!-- Login Modal -->
+    </main>
+
+    <!-- Login Modal -->
     <div id="loginModal" class="hidden flex fixed inset-0 bg-gray-900 bg-opacity-50 justify-center items-center z-50">
         <div class="bg-white rounded-lg shadow-lg w-full max-w-md relative">
             <div class="px-6 py-4">
@@ -110,44 +111,46 @@ try{
             <button onclick="toggleModal('loginModal')" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">&times;</button>
         </div>
     </div>
+
     <!-- Register Modal -->
     <div id="registerModal" class="hidden flex fixed inset-0 bg-gray-900 bg-opacity-50 justify-center items-center z-50">
-    <div class="bg-white rounded-lg shadow-lg w-full max-w-md relative">
-        <div class="px-6 py-4">
-            <h3 class="text-xl font-bold text-gray-800">Sign Up</h3>
-            <?php if (!empty($message)) : ?>
-                <div class="mt-4 p-4 rounded-md text-white">
-                    <?php echo htmlspecialchars($message); ?>
-                </div>
-            <?php endif; ?>
-            <form action="../backend/athentification/signup.php" method="POST" class="mt-4">
-                <div>
-                    <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
-                    <input type="text" name="name" id="name"  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                </div>
-                <div class="mt-4">
-                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                    <input type="email" name="email" id="email"  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                </div>
-                <div class="mt-4">
-                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                    <input type="password" name="password" id="password"  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                </div>
-                <div class="mt-4">
-                    <label for="role" class="block text-sm font-medium text-gray-700">Role</label>
-                    <select name="role" id="role" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                        <option value="student">Student</option>
-                        <option value="teacher">Teacher</option>
-                    </select>
-                </div>
-                <div class="mt-6">
-                    <button type="submit" name="submit" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700">Sign Up</button>
-                </div>
-            </form>
+        <div class="bg-white rounded-lg shadow-lg w-full max-w-md relative">
+            <div class="px-6 py-4">
+                <h3 class="text-xl font-bold text-gray-800">Sign Up</h3>
+                <?php if (!empty($message)) : ?>
+                    <div class="mt-4 p-4 rounded-md text-white">
+                        <?php echo htmlspecialchars($message); ?>
+                    </div>
+                <?php endif; ?>
+                <form action="../backend/athentification/signup.php" method="POST" class="mt-4">
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
+                        <input type="text" name="name" id="name"  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div class="mt-4">
+                        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                        <input type="email" name="email" id="email"  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div class="mt-4">
+                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                        <input type="password" name="password" id="password"  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div class="mt-4">
+                        <label for="role" class="block text-sm font-medium text-gray-700">Role</label>
+                        <select name="role" id="role" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                            <option value="student">Student</option>
+                            <option value="teacher">Teacher</option>
+                        </select>
+                    </div>
+                    <div class="mt-6">
+                        <button type="submit" name="submit" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700">Sign Up</button>
+                    </div>
+                </form>
+            </div>
+            <button onclick="toggleModal('registerModal')" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">&times;</button>
         </div>
-        <button onclick="toggleModal('registerModal')" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">&times;</button>
     </div>
-</div>
-<script src="../js/visitor.js" ></script>
+
+    <script src="../js/visitor.js"></script>
 </body>
 </html>

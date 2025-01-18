@@ -1,14 +1,14 @@
 <?php
-require_once '../database/connexion.php';
 
-class Teacher {
-    private $db;
+require_once '../backend/user.php';
+
+class Enseignant extends User {
 
     public function __construct() {
-        $database = new Database();
-        $this->db = $database->getConnection();
+        parent::__construct();
     }
 
+    // Ajouter un nouveau cours
     public function addCourse($title, $description, $content, $tags, $category_id, $teacher_id) {
         try {
             $query = "
@@ -25,29 +25,8 @@ class Teacher {
                 ':teacher_id' => $teacher_id
             ]);
             return true;
-        } catch (PDOException $e) {
-            throw new Exception("Erreur lors de l'ajout du cours : " . $e->getMessage());
-        }
-    }
-
-    // Récupérer les cours d'un enseignant
-    public function getCoursesByTeacher($teacher_id) {
-        try {
-            $query = "
-                SELECT 
-                    courses.course_id, 
-                    courses.title, 
-                    courses.description, 
-                    categories.name AS category_name
-                FROM courses
-                INNER JOIN categories ON courses.category_id = categories.category_id
-                WHERE courses.teacher_id = :teacher_id
-            ";
-            $stmt = $this->db->prepare($query);
-            $stmt->execute([':teacher_id' => $teacher_id]);
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            throw new Exception("Erreur lors de la récupération des cours : " . $e->getMessage());
+        } catch (Exception $e) {
+            return false;
         }
     }
 
@@ -69,8 +48,8 @@ class Teacher {
                 ':category_id' => $category_id
             ]);
             return true;
-        } catch (PDOException $e) {
-            throw new Exception("Erreur lors de la mise à jour du cours : " . $e->getMessage());
+        } catch (Exception $e) {
+            return false;
         }
     }
 
@@ -81,12 +60,11 @@ class Teacher {
             $stmt = $this->db->prepare($query);
             $stmt->execute([':course_id' => $course_id]);
             return true;
-        } catch (PDOException $e) {
-            throw new Exception("Erreur lors de la suppression du cours : " . $e->getMessage());
+        } catch (Exception $e) {
+            return false;
         }
     }
 
-    // Obtenir les statistiques du professeur
     public function getCourseStatistics($teacher_id) {
         try {
             $query = "
@@ -99,8 +77,24 @@ class Teacher {
             $stmt = $this->db->prepare($query);
             $stmt->execute([':teacher_id' => $teacher_id]);
             return $stmt->fetch(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            throw new Exception("Erreur lors de la récupération des statistiques : " . $e->getMessage());
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    public function getCoursesByTeacher($teacher_id) {
+        try {
+            $query = "
+                SELECT courses.course_id, courses.title, courses.description, categories.category_name
+                FROM courses
+                INNER JOIN categories ON courses.category_id = categories.category_id
+                WHERE courses.teacher_id = :teacher_id
+            ";
+            $stmt = $this->db->prepare($query);
+            $stmt->execute([':teacher_id' => $teacher_id]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC); 
+        } catch (Exception $e) {
+            return false;  
         }
     }
 }

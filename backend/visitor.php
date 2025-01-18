@@ -1,44 +1,31 @@
 <?php
-require_once '../backend/courses.php'; 
-require_once '../database/connexion.php'; 
 
-class Visitor {
-    private $db; 
-    private $courses;
+require_once '../backend/user.php';
+
+class Visiteur extends User {
 
     public function __construct() {
-        try {
-            $database = new Database();
-            $this->db = $database->getConnection();
-
-            $courseModel = new Course($this->db); 
-            $this->courses = $courseModel->getAllCourses();
-        } catch (Exception $e) {
-            echo "Erreur : " . $e->getMessage();
-            $this->courses = [];
-        }
+        parent::__construct();
     }
 
-    public function getCourses() {
-        return $this->courses;
-    }
-
-    public function getCourseDetails($course_id) {
-        $query = "SELECT courses.course_id, 
-                         courses.title, 
-                         courses.description, 
-                         courses.content, 
-                         categories.name AS category_name 
-                  FROM courses 
-                  LEFT JOIN categories ON courses.category_id = categories.category_id 
-                  WHERE courses.course_id = :course_id";
-    
+    // pagination
+    public function getCoursesPaginated($page = 1, $perPage = 10) {
+        $offset = ($page - 1) * $perPage;
+        $query = "SELECT course_id, title, description FROM courses LIMIT :offset, :perPage";
         $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':course_id', $course_id, PDO::PARAM_INT);
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $stmt->bindParam(':perPage', $perPage, PDO::PARAM_INT);
         $stmt->execute();
-    
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    
+
+    // Créer un compte
+    public function createAccount($name, $email, $password, $role) {
+        if ($role != 'Student' && $role != 'Teacher') {
+            return 'Rôle non valide';
+        }
+        $registration = new registre();
+        return $registration->registration($name, $email, $password, $role);
+    }
 }
+?>

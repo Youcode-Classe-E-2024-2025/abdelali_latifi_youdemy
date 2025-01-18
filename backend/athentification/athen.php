@@ -55,7 +55,7 @@ class login extends Database {
 
                 switch ($row['role']){
                     case 'Student':
-                        header('location: ../../public/student.php');
+                        header('location: ../../public/dashbord-student.php');
                         break;
                     case 'Teacher':
                     header('location: ../../public/dashbord-teacher.php');

@@ -1,20 +1,17 @@
 <?php
-require_once '../backend/visitor.php'; 
+require_once '../backend/student.php'; 
 require_once '../backend/courses.php';
 
-$page = new Visitor();
-$page = new Visitor();
+$page = new Etudiant();
 $courseManeger = new Course();
 
 $searchKeyword = isset($_GET['search']) ? htmlspecialchars(trim($_GET['search'])) : '' ;
 
-try{
+try {
     $courses = $searchKeyword ? $courseManeger->searchCourses($searchKeyword) : $courseManeger->getAllCourses();
-    }catch(Exception $e){
-
-    die ("erreur" .$e->getMessage());
+} catch(Exception $e) {
+    die ("Erreur lors de la récupération des cours : " . $e->getMessage());
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -37,10 +34,10 @@ try{
                     </button>
                     </a>
                 </div>
-               
             </div>
         </div>
     </nav>
+
     <!-- Hero Section -->
     <header class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white py-16">
         <div class="max-w-7xl mx-auto px-4 text-center">
@@ -62,6 +59,7 @@ try{
             </form>
         </div>
     </header>
+
     <!-- Courses Section -->
     <main class="py-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -81,7 +79,7 @@ try{
                                     Category: <?= htmlspecialchars($course['category_name']) ?>
                                 </span>
                                 <div class="mt-4">
-                                <a href="course-details.php?id=<?= htmlspecialchars($course['course_id']) ?>" class="text-blue-600 font-medium hover:underline">View Details</a>
+                                    <a href="course-details.php?id=<?= htmlspecialchars($course['course_id']) ?>" class="text-blue-600 font-medium hover:underline">View Details</a>
                                 </div>
                             </div>
                         </div>
