@@ -13,18 +13,19 @@ if(isset($_POST['submit'])){
 
     if(empty($name) || empty($password)) {
         $error = 'All fields are required.';
+        header('location: ../../public/index.php');
     }else{
         try{
 
             $result = $login->login($name, $password);
-            if($result === 10){
-                $error = 'incorrect password';
-                header('location: ../../public/index.php');
-
-            }elseif($result == 100){
-                $error = 'user not found';
-                header('location: ../../public/index.php');
-
+            if ($result === 10) {
+                $error = 'Incorrect password.';
+                header('Location: ../../public/index.php?error=' . urlencode($error));
+                exit;
+            } elseif ($result === 100) {
+                $error = 'User not found.';
+                header('Location: ../../public/index.php?error=' . urlencode($error));
+                exit;
             }
         } catch (Exception $e) {
             error_log("Login error: " . $e->getMessage());

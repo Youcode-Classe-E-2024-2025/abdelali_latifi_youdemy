@@ -30,14 +30,8 @@ try {
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100">
-
-    <!-- Conteneur principal -->
     <div class="max-w-4xl mx-auto px-6 py-10 bg-white shadow-lg rounded-lg mt-16">
-        
-        <!-- Titre -->
         <h1 class="text-4xl font-bold text-blue-600 text-center mb-8">My Enrolled Courses</h1>
-
-        <!-- Message si aucun cours n'est trouvé -->
         <?php if (isset($message)): ?>
             <div class="text-center text-lg text-red-600 font-semibold">
                 <?= htmlspecialchars($message) ?>
@@ -61,8 +55,6 @@ try {
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
-
-        <!-- Retour au tableau de bord -->
         <div class="text-center mt-10">
             <a href="dashbord-student.php" class="bg-gray-600 text-white px-6 py-3 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400">
                 Back to Dashboard
