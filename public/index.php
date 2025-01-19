@@ -75,7 +75,7 @@ try {
                                     Category: <?= htmlspecialchars($course['category_name']) ?>
                                 </span>
                                 <div class="mt-4">
-                                    <a href="course-details.php?id=<?= htmlspecialchars($course['course_id']) ?>" class="text-blue-600 font-medium hover:underline">
+                                    <a onclick="toggleModal('loginModal')"<?= htmlspecialchars($course['course_id']) ?> class="text-blue-600 font-medium hover:underline">
                                         View Details
                                     </a>
                                 </div>

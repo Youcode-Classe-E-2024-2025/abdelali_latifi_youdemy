@@ -38,7 +38,7 @@ class login extends Database {
     public function login ($name, $password){
 
         $conn = $this->getConnection();
-        $query = "select * from users where name = :name";
+        $query = "SELECT * FROM users WHERE name = :name";
         $stmt = $conn->prepare($query);
         $stmt->bindParam(':name', $name);
         $stmt->execute();
@@ -47,29 +47,30 @@ class login extends Database {
             $row = $stmt->fetch();
             
             if(password_verify($password, $row['password'])){
-                session_start();
+                session_start(); 
                 $_SESSION['name'] = $row['name'];
                 $_SESSION['email'] = $row['email'];
                 $_SESSION['password'] = $row['password'];
                 $_SESSION['role'] = $row['role'];
+                $_SESSION['student_id'] = $row['user_id'];  
 
                 switch ($row['role']){
                     case 'Student':
                         header('location: ../../public/dashbord-student.php');
                         break;
                     case 'Teacher':
-                    header('location: ../../public/dashbord-teacher.php');
-                    break;
+                        header('location: ../../public/dashbord-teacher.php');
+                        break;
                     case 'Administrator':
-                    header('location: ../../public/administor.php');
-                    break;    
-        }
-        exit;
-            }else{
-                return 10;
+                        header('location: ../../public/administor.php');
+                        break;    
+                }
+                exit;
+            } else {
+                return 10; // Mot de passe incorrect
             }
-        }else{
-            return 100;
+        } else {
+            return 100; // Utilisateur non trouvé
         }
     }
 }

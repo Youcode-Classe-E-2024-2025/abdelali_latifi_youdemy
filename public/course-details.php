@@ -7,7 +7,20 @@ if ($course_id === 0) {
     die("Invalid course ID.");
 }
 
-$visitor = new Etudiant();
+$visitor = new Etudiant();  
+
+if (isset($_GET['enroll']) && isset($_SESSION['student_id'])) {
+    $student_id = $_SESSION['student_id'];  
+    $enrolled = $visitor->enrollCourse($course_id, $student_id);  
+
+    if ($enrolled) {
+        $message = "You have successfully enrolled in the course!";
+    } else {
+        $message = "There was an error enrolling in the course. Please try again.";
+    }
+} else {
+    $message = "";
+}
 
 try {
     $courseDetails = $visitor->getCourseDetails($course_id);
@@ -51,8 +64,14 @@ try {
                 Back to Courses
             </a>
         </div>
+
+        <!-- Confirmation message -->
+        <?php if ($message): ?>
+            <div class="text-center mt-6 text-green-600 font-semibold"><?= htmlspecialchars($message) ?></div>
+        <?php endif; ?>
+
         <div class="text-center mt-6">
-            <a href="register-course.php?id=<?= $course_id ?>" class="bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400">
+            <a href="course-details.php?id=<?= $course_id ?>&enroll=true" class="bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400">
                 Enroll in this Course
             </a>
         </div>
