@@ -1,16 +1,26 @@
 <?php
-session_start();  
-require_once '../backend/student.php';  
+require_once '../backend/student.php';
 
+session_start();
 
 if (!isset($_SESSION['student_id'])) {
     die("Please log in first.");
 }
 
-$student_id = $_SESSION['student_id']; 
-$student = new Etudiant();
+$student_id = $_SESSION['student_id'];
+$visitor = new Etudiant();
 
-$courses = $student->getMyCourses($student_id);
+try {
+    $myCourses = $visitor->getMyCourses($student_id);
+
+    if (empty($myCourses)) {
+        $message = "You have not enrolled in any courses yet.";
+    } else {
+        $message = "";
+    }
+} catch (Exception $e) {
+    die("Error: " . $e->getMessage());
+}
 
 ?>
 
@@ -23,33 +33,30 @@ $courses = $student->getMyCourses($student_id);
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100">
-    <div class="max-w-7xl mx-auto px-6 py-10">
-        <h1 class="text-3xl font-bold text-gray-700 mb-6">My Enrolled Courses</h1>
+    <div class="max-w-4xl mx-auto px-6 py-10 bg-white shadow-lg rounded-lg mt-16">
+        <h1 class="text-4xl font-bold text-blue-600 text-center">My Enrolled Courses</h1>
 
-        <?php if (empty($courses)): ?>
-            <p class="text-gray-600">You have not enrolled in any courses yet.</p>
+        <?php if ($message): ?>
+            <div class="text-center mt-6 text-gray-600 font-semibold"><?= htmlspecialchars($message) ?></div>
         <?php else: ?>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-                <?php foreach ($courses as $course): ?>
-                    <div class="card bg-white shadow-lg rounded-lg overflow-hidden">
-                        <div class="p-4">
-                            <h3 class="text-xl font-semibold text-gray-800">
-                                <?= htmlspecialchars($course['title']) ?>
-                            </h3>
-                            <p class="text-sm text-gray-600 mt-2">
-                                <?= htmlspecialchars($course['description']) ?>
-                            </p>
-                            <span class="text-sm text-gray-500 block mt-2">
-                                Category: <?= htmlspecialchars($course['category_name']) ?>
-                            </span>
-                            <div class="mt-4">
-                                <a href="detaille-course.php?id=<?= htmlspecialchars($course['course_id']) ?>" class="text-blue-600 font-medium hover:underline">View Details</a>
-                            </div>
-                        </div>
+            <div class="mt-6 space-y-6">
+                <?php foreach ($myCourses as $course): ?>
+                    <div class="course-item p-6 bg-gray-50 rounded-md shadow-md">
+                        <h2 class="text-2xl font-semibold text-gray-800"><?= htmlspecialchars($course['title']) ?></h2>
+                        <p class="text-gray-600 mt-2"><?= nl2br(htmlspecialchars($course['description'])) ?></p>
+                        <?php if (!empty($course['category_name'])): ?>
+                            <p class="mt-2 text-gray-500"><strong>Category:</strong> <?= htmlspecialchars($course['category_name']) ?></p>
+                        <?php endif; ?>
                     </div>
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
+
+        <div class="text-center mt-6">
+            <a href="dashbord-student.php" class="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                Back to Dashboard
+            </a>
+        </div>
     </div>
 </body>
 </html>

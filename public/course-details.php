@@ -1,5 +1,6 @@
 <?php
 require_once '../backend/student.php';
+session_start();  // Assurez-vous que la session est démarrée
 
 $course_id = isset($_GET['id']) && is_numeric($_GET['id']) && $_GET['id'] > 0 ? (int)$_GET['id'] : 0;
 
@@ -9,8 +10,15 @@ if ($course_id === 0) {
 
 $visitor = new Etudiant();  
 
-if (isset($_GET['enroll']) && isset($_SESSION['student_id'])) {
-    $student_id = $_SESSION['student_id'];  
+// Vérifiez si l'utilisateur est connecté et récupérez son ID
+if (!isset($_SESSION['student_id'])) {
+    die("Please log in first.");
+}
+
+$student_id = $_SESSION['student_id']; // Récupérer l'ID de l'étudiant depuis la session
+
+if (isset($_GET['enroll'])) {
+    // Assurez-vous que l'utilisateur est connecté et l'ID est valide
     $enrolled = $visitor->enrollCourse($course_id, $student_id);  
 
     if ($enrolled) {

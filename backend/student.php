@@ -22,15 +22,20 @@ class Etudiant extends User {
 
     public function getMyCourses($student_id) {
         $query = "
-            SELECT courses.course_id, courses.title, courses.description 
+            SELECT 
+                courses.course_id, 
+                courses.title, 
+                courses.description, 
+                categories.name AS category_name
             FROM enrollments
             INNER JOIN courses ON enrollments.course_id = courses.course_id
+            LEFT JOIN categories ON courses.category_id = categories.category_id
             WHERE enrollments.student_id = :student_id
         ";
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':student_id', $student_id, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+    }    
 }
 ?>
