@@ -1,10 +1,18 @@
 <?php
+session_start();
+
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'Teacher') {
+    header('Location: login.php'); 
+    exit;
+}
+
+$teacher_id = $_SESSION['student_id']; 
 require_once '../backend/courses.php';
 require_once '../backend/teacher.php';
 
 $courseManager = new Enseignant();
-
-$teacher_id = 1; 
+$message = '';
+$error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_course'])) {
     $title = htmlspecialchars(trim($_POST['title']));
@@ -22,14 +30,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_course'])) {
 }
 
 try {
-    $courses = $courseManager->getCoursesByTeacher($teacher_id);
+    $courses = $courseManager->getCoursesByTeacher($teacher_id); 
 } catch (Exception $e) {
     $error = "Error fetching courses: " . $e->getMessage();
 }
 
 $stats = $courseManager->getCourseStatistics($teacher_id);
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,125 +46,85 @@ $stats = $courseManager->getCourseStatistics($teacher_id);
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100">
+    <!-- Navbar -->
     <nav class="bg-white shadow sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <a href="#" class="text-xl font-bold text-blue-600 hover:text-blue-800">Youdemy</a>
-                <div class="flex items-center space-x-4">
-                    <a href="../backend/athentification/logout.php" class="text-gray-700 hover:text-blue-600">Log Out</a>
+                <a href="#" class="text-xl font-bold text-blue-600 hover:text-blue-800">Teacher Dashboard</a>
+                <div class="flex space-x-4">
+                    <a href="my-courses.php" class="text-blue-600 hover:text-blue-800">My Courses</a>
+                    <a href="../backend/athentification/logout.php">
+                        <button class="text-white bg-red-600 px-4 py-2 rounded-md hover:bg-red-700">
+                            Log Out
+                        </button>
+                    </a>
                 </div>
             </div>
         </div>
     </nav>
 
+    <!-- Hero Section -->
+    <header class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <h1 class="text-4xl font-extrabold mb-4">Welcome to Your Teacher Dashboard</h1>
+            <p class="text-lg font-medium mb-6">Manage your courses and track your students.</p>
+        </div>
+    </header>
+
+    <!-- Courses Section -->
     <main class="py-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 class="text-3xl font-bold text-gray-700 mb-6">Teacher Dashboard</h1>
+            <h2 class="text-3xl font-bold text-gray-700 mb-6">My Courses</h2>
 
-            <!-- Add New Course -->
-            <section class="bg-white shadow rounded-lg p-6 mb-8">
-                <h2 class="text-2xl font-bold mb-4">Add New Course</h2>
-
-                <?php if (isset($message)): ?>
-                    <div class="bg-green-100 text-green-700 p-4 rounded mb-4">
-                        <?= htmlspecialchars($message) ?>
-                    </div>
-                <?php endif; ?>
-
-                <?php if (isset($error)): ?>
-                    <div class="bg-red-100 text-red-700 p-4 rounded mb-4">
-                        <?= htmlspecialchars($error) ?>
-                    </div>
-                <?php endif; ?>
-
-                <form method="POST" action="" class="space-y-4">
-                    <div>
-                        <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
-                        <input type="text" name="title" id="title" required
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-
-                    <div>
-                        <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
-                        <textarea name="description" id="description" rows="3" required
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"></textarea>
-                    </div>
-
-                    <div>
-                        <label for="content" class="block text-sm font-medium text-gray-700">Content (URL or file link)</label>
-                        <input type="text" name="content" id="content" required
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-
-                    <div>
-                        <label for="tags" class="block text-sm font-medium text-gray-700">Tags</label>
-                        <input type="text" name="tags" id="tags"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-
-                    <div>
-                        <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
-                        <select name="category" id="category" required
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                            <option value="">Select a category</option>
-                            <?php foreach ($categories as $category): ?>
-                                <option value="<?= $category['id'] ?>"><?= htmlspecialchars($category['name']) ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-
-                    <div>
-                        <button type="submit" name="add_course"
-                            class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700">Add Course</button>
-                    </div>
+            <!-- Add New Course Form -->
+            <div class="mb-8">
+                <form method="POST">
+                    <input type="text" name="title" placeholder="Course Title" class="px-4 py-2 rounded-md border border-gray-300 w-full mb-4" required>
+                    <textarea name="description" placeholder="Course Description" class="px-4 py-2 rounded-md border border-gray-300 w-full mb-4" required></textarea>
+                    <textarea name="content" placeholder="Course Content" class="px-4 py-2 rounded-md border border-gray-300 w-full mb-4" required></textarea>
+                    <input type="text" name="tags" placeholder="Course Tags" class="px-4 py-2 rounded-md border border-gray-300 w-full mb-4">
+                    <select name="category" class="px-4 py-2 rounded-md border border-gray-300 w-full mb-4" required>
+                        <option value="">Select Category</option>
+                        <option value="1">Programming</option>
+                        <option value="2">Mathematics</option>
+                        <option value="3">Science</option>
+                    </select>
+                    <button type="submit" name="add_course" class="bg-blue-600 text-white px-6 py-3 rounded-md">Add Course</button>
                 </form>
-            </section>
-
-            <!-- Manage Courses -->
-            <section class="bg-white shadow rounded-lg p-6 mb-8">
-                <h2 class="text-2xl font-bold mb-4">Manage Courses</h2>
-
-                <?php if (!empty($courses)): ?>
-                    <table class="min-w-full border-collapse border border-gray-300">
-                        <thead>
-                            <tr class="bg-gray-100">
-                                <th class="border border-gray-300 px-4 py-2">Title</th>
-                                <th class="border border-gray-300 px-4 py-2">Category</th>
-                                <th class="border border-gray-300 px-4 py-2">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($courses as $course): ?>
-                                <tr>
-                                    <td class="border border-gray-300 px-4 py-2"><?= htmlspecialchars($course['title']) ?></td>
-                                    <td class="border border-gray-300 px-4 py-2"><?= htmlspecialchars($course['category_name']) ?></td>
-                                    <td class="border border-gray-300 px-4 py-2">
-                                        <a href="edit-course.php?id=<?= htmlspecialchars($course['course_id']) ?>" class="text-blue-600 hover:underline">Edit</a> |
-                                        <a href="delete-course.php?id=<?= htmlspecialchars($course['course_id']) ?>" class="text-red-600 hover:underline" onclick="return confirm('Are you sure you want to delete this course?')">Delete</a>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                <?php else: ?>
-                    <p>No courses found.</p>
+                <?php if ($message): ?>
+                    <div class="text-green-500 mt-4"><?= $message ?></div>
                 <?php endif; ?>
-            </section>
+                <?php if ($error): ?>
+                    <div class="text-red-500 mt-4"><?= $error ?></div>
+                <?php endif; ?>
+            </div>
 
-            <!-- Statistics -->
-            <section class="bg-white shadow rounded-lg p-6">
-                <h2 class="text-2xl font-bold mb-4">Statistics</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div class="bg-blue-100 p-4 rounded shadow">
-                        <h3 class="text-lg font-bold">Total Courses</h3>
-                        <p class="text-3xl font-bold text-blue-600"><?= htmlspecialchars($stats['total_courses']) ?></p>
-                    </div>
-                    <div class="bg-green-100 p-4 rounded shadow">
-                        <h3 class="text-lg font-bold">Total Students</h3>
-                        <p class="text-3xl font-bold text-green-600"><?= htmlspecialchars($stats['total_students']) ?></p>
-                    </div>
-                </div>
-            </section>
+            <!-- Display Courses -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+                <?php if (!empty($courses)): ?>
+                    <?php foreach ($courses as $course): ?>
+                        <div class="card bg-white shadow-lg rounded-lg overflow-hidden">
+                            <div class="p-4">
+                                <h3 class="text-xl font-semibold text-gray-800"><?= htmlspecialchars($course['title']) ?></h3>
+                                <p class="text-sm text-gray-600 mt-2"><?= htmlspecialchars($course['description']) ?></p>
+                                <span class="text-sm text-gray-500 block mt-2">Category: <?= htmlspecialchars($course['category_name']) ?></span>
+                                <div class="mt-4">
+                                    <a href="course-details.php?id=<?= htmlspecialchars($course['course_id']) ?>" class="text-blue-600 font-medium hover:underline">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p class="text-gray-600">You don't have any courses yet. Start by adding a new one!</p>
+                <?php endif; ?>
+            </div>
+
+            <!-- Course Statistics -->
+            <h2 class="text-3xl font-bold text-gray-700 mt-10 mb-6">Course Statistics</h2>
+            <div class="bg-white shadow-lg rounded-lg p-6">
+                <p><strong>Total Courses:</strong> <?= htmlspecialchars($stats['total_courses']) ?></p>
+                <p><strong>Total Students Enrolled:</strong> <?= htmlspecialchars($stats['total_students']) ?></p>
+            </div>
         </div>
     </main>
 </body>

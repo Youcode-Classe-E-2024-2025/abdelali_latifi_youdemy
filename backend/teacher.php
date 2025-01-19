@@ -92,7 +92,7 @@ class Enseignant extends User {
             ";
             $stmt = $this->db->prepare($query);
             $stmt->execute([':teacher_id' => $teacher_id]);
-            return $stmt->fetchAll(PDO::FETCH_ASSOC); 
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);  // Retourner les cours sous forme de tableau associatif
         } catch (Exception $e) {
             return false;  
         }
