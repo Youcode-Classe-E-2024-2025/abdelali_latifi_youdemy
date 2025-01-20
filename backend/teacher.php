@@ -97,7 +97,44 @@ class Enseignant  extends User {
             ':teacher_id' => $teacher_id
         ]);
     }
+
+    public function getCourseById($course_id, $teacher_id) {
+        $sql = "SELECT c.*, 
+                       GROUP_CONCAT(t.name) AS tags 
+                FROM courses c
+                LEFT JOIN course_tags ct ON c.course_id = ct.course_id
+                LEFT JOIN tags t ON ct.tag_id = t.tag_id
+                WHERE c.course_id = :course_id AND c.teacher_id = :teacher_id
+                GROUP BY c.course_id";
     
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([
+            ':course_id' => $course_id,
+            ':teacher_id' => $teacher_id
+        ]);
     
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    
+    public function updateCourse($course_id, $title, $description, $content, $tags, $category_id, $teacher_id) {
+        $sql = "UPDATE courses 
+                SET title = :title, 
+                    description = :description, 
+                    content = :content, 
+                    category_id = :category_id 
+                WHERE course_id = :course_id AND teacher_id = :teacher_id";
+    
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([
+            ':title' => $title,
+            ':description' => $description,
+            ':content' => $content,
+            ':category_id' => $category_id,
+            ':course_id' => $course_id,
+            ':teacher_id' => $teacher_id
+        ]);
+    
+    }
+
 }
 ?>

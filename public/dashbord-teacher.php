@@ -121,27 +121,36 @@ $stats = $courseManager->getCourseStatistics($teacher_id);
 
             <!-- Courses Display -->
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-                <?php if (!empty($courses)): ?>
-                    <?php foreach ($courses as $course): ?>
-                        <div class="card bg-white shadow-lg rounded-lg overflow-hidden">
-                            <div class="p-4">
-                                <h3 class="text-xl font-semibold text-gray-800"><?= htmlspecialchars($course['title']) ?></h3>
-                                <p class="text-sm text-gray-600 mt-2"><?= htmlspecialchars($course['description']) ?></p>
-                                <span class="text-sm text-gray-500 block mt-2">Category: <?= htmlspecialchars($course['category_name']) ?></span>
-                                <div class="mt-4">
-                                    <a href="course-details.php?id=<?= htmlspecialchars($course['course_id']) ?>" class="text-blue-600 font-medium hover:underline">View Details</a>
-                                </div>
-                                <form action="#" method="POST" class="mt-4">
-                                    <input type="hidden" name="course_id" value="<?= htmlspecialchars($course['course_id']) ?>">
-                                    <button type="submit" name="delete_course" class="bg-red-600 text-white px-6 py-3 rounded-md">Delete Course</button>
-                                </form>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <p class="text-gray-600">You don't have any courses yet. Start by adding a new one!</p>
-                <?php endif; ?>
+    <?php if (!empty($courses)): ?>
+        <?php foreach ($courses as $course): ?>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden p-4 hover:shadow-xl transition-shadow duration-300 ease-in-out">
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-gray-800"><?= htmlspecialchars($course['title']) ?></h3>
+                    <p class="text-sm text-gray-600"><?= htmlspecialchars($course['description']) ?></p>
+                    <span class="text-sm text-gray-500">Category: <?= htmlspecialchars($course['category_name']) ?></span>
+
+                    <div class="flex space-x-3 mt-4">
+                        <!-- Petit bouton Modifier -->
+                        <a href="../public/edite-cours.php?id=<?= htmlspecialchars($course['course_id']) ?>" class="bg-blue-600 text-white text-sm px-4 py-2 rounded-md text-center hover:bg-blue-700 transition duration-200">
+                            Modify
+                        </a>
+                        
+                        <!-- Petit bouton Supprimer -->
+                        <form action="#" method="POST" class="flex-1">
+                            <input type="hidden" name="course_id" value="<?= htmlspecialchars($course['course_id']) ?>">
+                            <button type="submit" name="delete_course" class="bg-red-600 text-white text-sm px-4 py-2 rounded-md text-center hover:bg-red-700 transition duration-200">
+                                Delete
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p class="text-gray-600">You don't have any courses yet. Start by adding a new one!</p>
+    <?php endif; ?>
+</div>
+
 
             <!-- Course Statistics -->
             <h2 class="text-3xl font-bold text-gray-700 mt-10 mb-6">Course Statistics</h2>
