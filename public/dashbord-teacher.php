@@ -52,7 +52,6 @@ $stats = $courseManager->getCourseStatistics($teacher_id);
             <div class="flex justify-between items-center h-16">
                 <a href="#" class="text-xl font-bold text-blue-600 hover:text-blue-800">Teacher Dashboard</a>
                 <div class="flex space-x-4">
-                    <a href="my-courses.php" class="text-blue-600 hover:text-blue-800">My Courses</a>
                     <a href="../backend/athentification/logout.php">
                         <button class="text-white bg-red-600 px-4 py-2 rounded-md hover:bg-red-700">
                             Log Out
@@ -99,25 +98,31 @@ $stats = $courseManager->getCourseStatistics($teacher_id);
                 <?php endif; ?>
             </div>
 
-            <!-- Display Courses -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-                <?php if (!empty($courses)): ?>
-                    <?php foreach ($courses as $course): ?>
-                        <div class="card bg-white shadow-lg rounded-lg overflow-hidden">
-                            <div class="p-4">
-                                <h3 class="text-xl font-semibold text-gray-800"><?= htmlspecialchars($course['title']) ?></h3>
-                                <p class="text-sm text-gray-600 mt-2"><?= htmlspecialchars($course['description']) ?></p>
-                                <span class="text-sm text-gray-500 block mt-2">Category: <?= htmlspecialchars($course['category_name']) ?></span>
-                                <div class="mt-4">
-                                    <a href="course-details.php?id=<?= htmlspecialchars($course['course_id']) ?>" class="text-blue-600 font-medium hover:underline">View Details</a>
-                                </div>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <p class="text-gray-600">You don't have any courses yet. Start by adding a new one!</p>
-                <?php endif; ?>
+<!-- Affichage des Cours -->
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+    <?php if (!empty($courses)): ?>
+        <?php foreach ($courses as $course): ?>
+            <div class="card bg-white shadow-lg rounded-lg overflow-hidden">
+                <div class="p-4">
+                    <h3 class="text-xl font-semibold text-gray-800"><?= htmlspecialchars($course['title']) ?></h3>
+                    <p class="text-sm text-gray-600 mt-2"><?= htmlspecialchars($course['description']) ?></p>
+                    <span class="text-sm text-gray-500 block mt-2">Category: <?= htmlspecialchars($course['category_name']) ?></span>
+                    <div class="mt-4">
+                        <a href="course-details.php?id=<?= htmlspecialchars($course['course_id']) ?>" class="text-blue-600 font-medium hover:underline">View Details</a>
+                    </div>
+                    <!-- Ajouter un bouton de suppression -->
+                    <form action="teacher-dashboard.php" method="POST" class="mt-4">
+                        <input type="hidden" name="course_id" value="<?= htmlspecialchars($course['course_id']) ?>">
+                        <button type="submit" name="delete_course" class="bg-red-600 text-white px-6 py-3 rounded-md">Delete Course</button>
+                    </form>
+                </div>
             </div>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p class="text-gray-600">You don't have any courses yet. Start by adding a new one!</p>
+    <?php endif; ?>
+</div>
+
 
             <!-- Course Statistics -->
             <h2 class="text-3xl font-bold text-gray-700 mt-10 mb-6">Course Statistics</h2>

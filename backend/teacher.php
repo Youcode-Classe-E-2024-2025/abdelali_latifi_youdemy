@@ -2,7 +2,7 @@
 
 require_once '../backend/user.php';
 
-class Enseignant {
+class Enseignant  extends User {
     private $pdo;
 
     public function __construct() {
@@ -82,5 +82,26 @@ class Enseignant {
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function deleteCourse($course_id, $teacher_id) {
+        try {
+            // Désinscrire les étudiants
+            $sql = "DELETE FROM enrollments WHERE course_id = :course_id";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([':course_id' => $course_id]);
+    
+            // Supprimer le cours
+            $sql = "DELETE FROM courses WHERE course_id = :course_id AND teacher_id = :teacher_id";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([
+                ':course_id' => $course_id,
+                ':teacher_id' => $teacher_id
+            ]);
+        } catch (Exception $e) {
+            throw new Exception("Error deleting course: " . $e->getMessage());
+        }
+    }
+    
+    
 }
 ?>
