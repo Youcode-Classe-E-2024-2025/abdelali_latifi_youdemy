@@ -53,15 +53,23 @@ class Admin extends User {
     }
 
     public function bulkInsertTags($tags) {
+        // Diviser la chaîne des tags en un tableau
+        $tagsArray = explode(',', $tags);
+        
+        // Supprimer les espaces inutiles autour de chaque tag
+        $tagsArray = array_map('trim', $tagsArray);
+    
+        // Insérer chaque tag dans la base de données
         $sql = "INSERT INTO tags (name) VALUES (:name) ON DUPLICATE KEY UPDATE name = name;";
         $stmt = $this->db->prepare($sql);
-
-        foreach ($tags as $tag) {
+    
+        foreach ($tagsArray as $tag) {
             $stmt->execute([':name' => $tag]);
         }
-
+    
         return true;
     }
+    
 
     // Statistiques globales
     public function getGlobalStatistics() {
