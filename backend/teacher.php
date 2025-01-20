@@ -22,39 +22,10 @@ class Enseignant  extends User {
             ':teacher_id' => $teacher_id
         ]);
 
-        $course_id = $this->pdo->lastInsertId(); 
-
-        if (!empty($tags)) {
-            $tags = explode(',', $tags); 
-            foreach ($tags as $tag) {
-                $tag = trim($tag);
-                $this->addTagIfNotExists($tag);
-                $tag_id = $this->getTagId($tag);
-                $this->associateTagWithCourse($course_id, $tag_id);
-            }
-        }
 
         return true;
     }
 
-    private function addTagIfNotExists($tag) {
-        $sql = "INSERT IGNORE INTO tags (name) VALUES (:name)";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':name' => $tag]);
-    }
-
-    private function getTagId($tag) {
-        $sql = "SELECT tag_id FROM tags WHERE name = :name";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':name' => $tag]);
-        return $stmt->fetchColumn();
-    }
-
-    private function associateTagWithCourse($course_id, $tag_id) {
-        $sql = "INSERT INTO course_tags (course_id, tag_id) VALUES (:course_id, :tag_id)";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':course_id' => $course_id, ':tag_id' => $tag_id]);
-    }
 
     //  les statistiques
     public function getCourseStatistics($teacher_id) {

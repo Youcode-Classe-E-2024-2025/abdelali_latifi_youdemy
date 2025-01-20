@@ -60,7 +60,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100">
-    <div class="max-w-4xl mx-auto py-10">
+<div class="max-w-4xl mx-auto py-10">
+        <a href="../public/dashbord-teacher.php" class="inline-block bg-gray-200 text-gray-700 px-4 py-2 mb-6 rounded hover:bg-gray-300">
+            ← Back to Dashboard
+        </a>
+
         <h1 class="text-3xl font-bold text-gray-800 mb-6">Edit Course</h1>
 
         <?php if ($message): ?>
