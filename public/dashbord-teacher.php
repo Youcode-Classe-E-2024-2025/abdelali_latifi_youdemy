@@ -14,7 +14,6 @@ $courseManager = new Enseignant();
 $message = '';
 $error = '';
 
-// Traitement de l'ajout de cours
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_course'])) {
     $title = htmlspecialchars(trim($_POST['title']));
     $description = htmlspecialchars(trim($_POST['description']));
@@ -30,10 +29,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_course'])) {
     }
 }
 
-// Traitement de la suppression de cours
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_course'])) {
-    $course_id = (int) $_POST['course_id'];  // Récupérer l'ID du cours à supprimer
-    
+    $course_id = (int) $_POST['course_id'];
+
     try {
         $courseManager->deleteCourse($course_id, $teacher_id);
         $message = "Course deleted successfully!";
@@ -88,30 +86,40 @@ $stats = $courseManager->getCourseStatistics($teacher_id);
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-3xl font-bold text-gray-700 mb-6">My Courses</h2>
 
-            <!-- Add New Course Form -->
-            <div class="mb-8">
-                <form method="POST">
-                    <input type="text" name="title" placeholder="Course Title" class="px-4 py-2 rounded-md border border-gray-300 w-full mb-4" required>
-                    <textarea name="description" placeholder="Course Description" class="px-4 py-2 rounded-md border border-gray-300 w-full mb-4" required></textarea>
-                    <textarea name="content" placeholder="Course Content" class="px-4 py-2 rounded-md border border-gray-300 w-full mb-4" required></textarea>
-                    <input type="text" name="tags" placeholder="Course Tags" class="px-4 py-2 rounded-md border border-gray-300 w-full mb-4">
-                    <select name="category" class="px-4 py-2 rounded-md border border-gray-300 w-full mb-4" required>
-                        <option value="">Select Category</option>
-                        <option value="1">Programming</option>
-                        <option value="2">Mathematics</option>
-                        <option value="3">Science</option>
-                    </select>
-                    <button type="submit" name="add_course" class="bg-blue-600 text-white px-6 py-3 rounded-md">Add Course</button>
-                </form>
-                <?php if ($message): ?>
-                    <div class="text-green-500 mt-4"><?= $message ?></div>
-                <?php endif; ?>
-                <?php if ($error): ?>
-                    <div class="text-red-500 mt-4"><?= $error ?></div>
-                <?php endif; ?>
+            <!-- Add New Course Button -->
+            <button id="openModalButton" class="bg-blue-600 text-white px-6 py-3 rounded-md mt-4">Add Course</button>
+
+            <!-- The Modal -->
+            <div id="courseModal" class="fixed inset-0 flex items-center justify-center z-50 hidden bg-gray-500 bg-opacity-50">
+                <div class="bg-white p-6 rounded-lg w-96">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-semibold">Add New Course</h3>
+                        <button id="closeModalButton" class="text-gray-600 hover:text-gray-900">&times;</button>
+                    </div>
+                    <form method="POST">
+                        <input type="text" name="title" placeholder="Course Title" class="px-4 py-2 rounded-md border border-gray-300 w-full mb-4" required>
+                        <textarea name="description" placeholder="Course Description" class="px-4 py-2 rounded-md border border-gray-300 w-full mb-4" required></textarea>
+                        <textarea name="content" placeholder="Course Content" class="px-4 py-2 rounded-md border border-gray-300 w-full mb-4" required></textarea>
+                        <input type="text" name="tags" placeholder="Course Tags" class="px-4 py-2 rounded-md border border-gray-300 w-full mb-4">
+                        <select name="category" class="px-4 py-2 rounded-md border border-gray-300 w-full mb-4" required>
+                            <option value="">Select Category</option>
+                            <option value="1">Programming</option>
+                            <option value="2">Mathematics</option>
+                            <option value="3">Science</option>
+                        </select>
+                        <button type="submit" name="add_course" class="bg-blue-600 text-white px-6 py-3 rounded-md w-full">Add Course</button>
+                    </form>
+                </div>
             </div>
 
-            <!-- Affichage des Cours -->
+            <?php if ($message): ?>
+                <div class="text-green-500 mt-4"><?= $message ?></div>
+            <?php endif; ?>
+            <?php if ($error): ?>
+                <div class="text-red-500 mt-4"><?= $error ?></div>
+            <?php endif; ?>
+
+            <!-- Courses Display -->
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
                 <?php if (!empty($courses)): ?>
                     <?php foreach ($courses as $course): ?>
@@ -123,8 +131,7 @@ $stats = $courseManager->getCourseStatistics($teacher_id);
                                 <div class="mt-4">
                                     <a href="course-details.php?id=<?= htmlspecialchars($course['course_id']) ?>" class="text-blue-600 font-medium hover:underline">View Details</a>
                                 </div>
-                                <!-- Ajouter un bouton de suppression -->
-                                <form action="" method="POST" class="mt-4">
+                                <form action="#" method="POST" class="mt-4">
                                     <input type="hidden" name="course_id" value="<?= htmlspecialchars($course['course_id']) ?>">
                                     <button type="submit" name="delete_course" class="bg-red-600 text-white px-6 py-3 rounded-md">Delete Course</button>
                                 </form>
@@ -144,5 +151,6 @@ $stats = $courseManager->getCourseStatistics($teacher_id);
             </div>
         </div>
     </main>
+    <script src="../js/teacher.js" ></script>
 </body>
 </html>
