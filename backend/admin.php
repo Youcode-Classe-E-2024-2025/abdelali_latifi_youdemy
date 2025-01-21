@@ -145,6 +145,14 @@ class Admin extends User {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function deleteTeacher($userId) {
+        $query = "DELETE FROM users WHERE user_id = :user_id AND role = 'Teacher'";
+        $stmt = $this->db->prepare($query); // $this->db représente la connexion PDO
+        $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
+        $stmt->execute();
+    }
+    
     
     
 }

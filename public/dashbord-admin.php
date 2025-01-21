@@ -44,7 +44,7 @@
                 <th class="border border-gray-300 p-2">Nom</th>
                 <th class="border border-gray-300 p-2">Email</th>
                 <th class="border border-gray-300 p-2">Statut</th>
-                <th class="border border-gray-300 p-2">Action</th>
+                <th class="border border-gray-300 p-2">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -59,13 +59,19 @@
                         <td class='border border-gray-300 p-2'>{$teacher['email']}</td>
                         <td class='border border-gray-300 p-2'>" . ($teacher['is_active'] ? 'Actif' : 'Suspendu') . "</td>
                         <td class='border border-gray-300 p-2'>
-                            <form action='' method='POST'>
+                            <!-- Formulaire pour modifier le statut -->
+                            <form action='' method='POST' class='inline'>
                                 <input type='hidden' name='user_id' value='{$teacher['user_id']}'>
                                 <select name='is_active' class='border p-2 rounded'>
                                     <option value='1'" . ($teacher['is_active'] ? ' selected' : '') . ">Activer</option>
                                     <option value='0'" . (!$teacher['is_active'] ? ' selected' : '') . ">Suspendre</option>
                                 </select>
                                 <button type='submit' name='update_user_status' class='bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600'>Mettre à jour</button>
+                            </form>
+                            <!-- Formulaire pour supprimer -->
+                            <form action='' method='POST' class='inline'>
+                                <input type='hidden' name='user_id' value='{$teacher['user_id']}'>
+                                <button type='submit' name='delete_teacher' class='bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600'>Supprimer</button>
                             </form>
                         </td>
                     </tr>";
@@ -83,8 +89,15 @@
         $admin->updateUserStatus($_POST['user_id'], $_POST['is_active']);
         echo "<p class='text-green-500 mt-2'>Le statut de l'utilisateur a été mis à jour.</p>";
     }
+
+    // Traitement du formulaire de suppression
+    if (isset($_POST['delete_teacher'])) {
+        $admin->deleteTeacher($_POST['user_id']);
+        echo "<p class='text-red-500 mt-2'>L'enseignant a été supprimé avec succès.</p>";
+    }
     ?>
 </section>
+
  <!-- Section Gestion des catégories -->
 <section id="categories-section" class="bg-white p-4 rounded shadow">
     <h2 class="text-xl font-semibold mb-4">Gestion des catégories</h2>
