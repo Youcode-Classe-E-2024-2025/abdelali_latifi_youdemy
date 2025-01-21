@@ -99,122 +99,136 @@
 </section>
 
  <!-- Section Gestion des catégories -->
-<section id="categories-section" class="bg-white p-4 rounded shadow">
-    <h2 class="text-xl font-semibold mb-4">Gestion des catégories</h2>
+<!-- Section Gestion des catégories -->
+<section id="categories-section" class="bg-white p-4 rounded-lg shadow-lg mb-8">
+    <h2 class="text-xl font-semibold mb-4 text-gray-800">Gestion des catégories</h2>
     <!-- Formulaire pour ajouter une catégorie -->
-    <form action="" method="POST" class="mb-4">
-        <label for="category_name" class="block font-medium">Nom de la catégorie :</label>
-        <input type="text" name="category_name" id="category_name" class="border p-2 rounded w-full mb-2" required>
-        <button type="submit" name="add_category" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Ajouter la catégorie</button>
+    <form action="" method="POST" class="mb-6">
+        <label for="category_name" class="block font-medium text-gray-700 mb-2">Nom de la catégorie :</label>
+        <input type="text" name="category_name" id="category_name" class="border p-3 rounded w-full mb-4 focus:ring-2 focus:ring-blue-500" required>
+        <button type="submit" name="add_category" class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">Ajouter la catégorie</button>
     </form>
+
     <!-- Affichage des catégories existantes avec un bouton de suppression -->
-    <h3 class="font-medium mb-2">Catégories existantes :</h3>
-    <ul class="space-y-2">
+    <h3 class="font-medium mb-2 text-gray-800">Catégories existantes :</h3>
+    <div class="max-h-72 overflow-y-auto space-y-4">
         <?php
-        // Récupération des catégories depuis la base de données
-        $categories = $admin->getCategories(); // Appeler une méthode pour récupérer les catégories
+        $categories = $admin->getCategories();
         if (!empty($categories)) {
             foreach ($categories as $category) {
-                echo "<li class='flex justify-between items-center'>
-                        <span>{$category['name']}</span>
+                echo "<li class='flex justify-between items-center bg-gray-100 p-4 rounded-lg shadow-md'>
+                        <span class='text-lg text-gray-800'>{$category['name']}</span>
                         <form action='' method='POST' class='inline'>
                             <input type='hidden' name='category_id' value='{$category['category_id']}'>
-                            <button type='submit' name='delete_category' class='bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600'>Supprimer</button>
+                            <button type='submit' name='delete_category' class='bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400'>Supprimer</button>
                         </form>
                     </li>";
             }
         } else {
-            echo "<li>Aucune catégorie disponible.</li>";
+            echo "<li class='text-gray-500'>Aucune catégorie disponible.</li>";
         }
         ?>
-    </ul>
+    </div>
 
     <?php
-    // Traitement du formulaire d'ajout de catégorie
     if (isset($_POST['add_category'])) {
         $admin->addCategory($_POST['category_name']);
-        echo "<p class='text-green-500 mt-2'>La catégorie a été ajoutée avec succès.</p>";
+        echo "<p class='text-green-500 mt-4'>La catégorie a été ajoutée avec succès.</p>";
     }
 
     if (isset($_POST['delete_category'])) {
         $admin->deleteCategory($_POST['category_id']);
-        echo "<p class='text-green-500 mt-2'>La catégorie a été supprimée avec succès.</p>";
+        echo "<p class='text-red-500 mt-4'>La catégorie a été supprimée avec succès.</p>";
     }
     ?>
 </section>
 
-       <!-- Section Gestion des tags -->
-<section id="tags-section" class="bg-white p-4 rounded shadow">
-    <h2 class="text-xl font-semibold mb-4">Gestion des tags</h2>
+<!-- Section Gestion des tags -->
+<section id="tags-section" class="bg-white p-4 rounded-lg shadow-lg mb-8">
+    <h2 class="text-xl font-semibold mb-4 text-gray-800">Gestion des tags</h2>
     <!-- Formulaire pour ajouter des tags en masse -->
-    <form action="" method="POST">
-        <label for="tags" class="block font-medium">Tags (séparés par des virgules) :</label>
-        <textarea name="tags" id="tags" rows="3" class="border p-2 rounded w-full mb-2" required></textarea>
-        <button type="submit" name="bulk_insert_tags" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Insérer en masse</button>
+    <form action="" method="POST" class="mb-6">
+        <label for="tags" class="block font-medium text-gray-700 mb-2">Tags (séparés par des virgules) :</label>
+        <textarea name="tags" id="tags" rows="3" class="border p-3 rounded w-full mb-4 focus:ring-2 focus:ring-blue-500" required></textarea>
+        <button type="submit" name="bulk_insert_tags" class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">Insérer en masse</button>
     </form>
 
     <!-- Affichage des tags existants avec un bouton de suppression -->
-    <h3 class="font-medium mb-2">Tags existants :</h3>
-    <ul class="space-y-2">
+    <h3 class="font-medium mb-2 text-gray-800">Tags existants :</h3>
+    <div class="max-h-72 overflow-y-auto space-y-4">
         <?php
-        // Récupérer les tags depuis la base de données
-        $tags = $admin->getTags(); // Appeler une méthode pour récupérer les tags
+        $tags = $admin->getTags();
         if (!empty($tags)) {
             foreach ($tags as $tag) {
-                echo "<li class='flex justify-between items-center'>
-                        <span>{$tag['name']}</span>
+                echo "<li class='flex justify-between items-center bg-gray-100 p-4 rounded-lg shadow-md'>
+                        <span class='text-lg text-gray-800'>{$tag['name']}</span>
                         <form action='' method='POST' class='inline'>
                             <input type='hidden' name='tag_id' value='{$tag['tag_id']}'>
-                            <button type='submit' name='delete_tag' class='bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600'>Supprimer</button>
+                            <button type='submit' name='delete_tag' class='bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400'>Supprimer</button>
                         </form>
                     </li>";
             }
         } else {
-            echo "<li>Aucun tag disponible.</li>";
+            echo "<li class='text-gray-500'>Aucun tag disponible.</li>";
         }
         ?>
-    </ul>
+    </div>
 
     <?php
-    // Traitement du formulaire d'ajout de tags
     if (isset($_POST['bulk_insert_tags'])) {
         $admin->bulkInsertTags($_POST['tags']);
-        echo "<p class='text-green-500 mt-2'>Les tags ont été ajoutés avec succès.</p>";
+        echo "<p class='text-green-500 mt-4'>Les tags ont été ajoutés avec succès.</p>";
     }
 
-    // Traitement du formulaire de suppression de tag
     if (isset($_POST['delete_tag'])) {
         $admin->deleteTag($_POST['tag_id']);
-        echo "<p class='text-green-500 mt-2'>Le tag a été supprimé avec succès.</p>";
+        echo "<p class='text-red-500 mt-4'>Le tag a été supprimé avec succès.</p>";
     }
     ?>
 </section>
 
 
             <!-- Section Statistiques globales -->
-            <section id="stats-section" class="bg-white p-4 rounded shadow">
-                <h2 class="text-xl font-semibold mb-4">Statistiques globales</h2>
-                <?php
-                $stats = $admin->getGlobalStatistics();
-                ?>
-                <div>
-                    <h3 class="font-medium">Résumé</h3>
-                    <p>Total des cours : <span id="total-courses"><?php echo $stats['total_courses']; ?></span></p>
-
-                    <h3 class="font-medium">Répartition par catégorie</h3>
-                    <ul id="courses-by-category" class="list-disc pl-6">
-                        <?php
-                        if (!empty($stats['courses_by_category'])) {
-                            foreach ($stats['courses_by_category'] as $category) {
-                                echo "<li>{$category['category']} : {$category['course_count']} cours</li>";
-                            }
-                        } else {
-                            echo "<li>Aucune catégorie trouvée.</li>";
-                        }
-                        ?>
-                    </ul>
+            <section id="stats-section" class="bg-white p-6 rounded-lg shadow-lg">
+    <h2 class="text-2xl font-semibold text-gray-800 mb-6">Statistiques globales</h2>
+    <?php
+    $stats = $admin->getGlobalStatistics();
+    ?>
+    <div class="space-y-6">
+        <!-- Résumé -->
+        <div class="bg-gray-50 p-4 rounded-lg shadow-md">
+            <h3 class="font-medium text-gray-700 mb-2">Résumé des statistiques</h3>
+            <div class="flex items-center space-x-4">
+                <div class="text-3xl font-semibold text-indigo-600">
+                    <?php echo $stats['total_courses']; ?>
                 </div>
-            </section>
+                <span class="text-lg text-gray-600">Total des cours</span>
+            </div>
+        </div>
+
+        <!-- Répartition par catégorie -->
+        <div class="bg-gray-50 p-4 rounded-lg shadow-md">
+            <h3 class="font-medium text-gray-700 mb-2">Répartition par catégorie</h3>
+            <?php
+            if (!empty($stats['courses_by_category'])) {
+                foreach ($stats['courses_by_category'] as $category) {
+                    echo "
+                    <div class='flex items-center justify-between mb-2'>
+                        <span class='text-gray-700 font-medium'>{$category['category']}</span>
+                        <span class='text-gray-500'>{$category['course_count']} cours</span>
+                        <span class='bg-indigo-500 text-white text-xs px-2 py-1 rounded-full'>
+                            {$category['course_count']}
+                        </span>
+                    </div>";
+                }
+            } else {
+                echo "<p class='text-gray-500'>Aucune catégorie trouvée.</p>";
+            }
+            ?>
+        </div>
+    </div>
+</section>
+
         </main>
     </div>
 </body>
