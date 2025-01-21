@@ -138,6 +138,14 @@ class Admin extends User {
         $stmt->execute([':tag_id' => $tag_id]);
         return $stmt->rowCount(); // Retourne le nombre de lignes affectées
     }
+
+    public function getTeachers() {
+        $query = "SELECT user_id, name, email, is_active FROM users WHERE role = 'Teacher'";
+        $stmt = $this->db->prepare($query); // Suppose que $this->db est votre connexion PDO
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
     
 }
 

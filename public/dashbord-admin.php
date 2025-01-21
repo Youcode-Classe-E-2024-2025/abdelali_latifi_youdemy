@@ -33,39 +33,59 @@
 
             <!-- Section Gestion des utilisateurs -->
             <section id="users-section" class="bg-white p-4 rounded shadow">
-                <h2 class="text-xl font-semibold mb-4">Gestion des utilisateurs</h2>
-                <form action="" method="POST" class="mb-4">
-                    <label for="teacher_id" class="block font-medium">ID de l'enseignant à valider :</label>
-                    <input type="number" name="teacher_id" id="teacher_id" class="border p-2 rounded w-full mb-2" required>
-                    <button type="submit" name="validate_teacher" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Valider</button>
-                </form>
-
-                <form action="" method="POST">
-                    <label for="user_id" class="block font-medium">ID de l'utilisateur :</label>
-                    <input type="number" name="user_id" id="user_id" class="border p-2 rounded w-full mb-2" required>
-
-                    <label for="is_active" class="block font-medium">Statut :</label>
-                    <select name="is_active" id="is_active" class="border p-2 rounded w-full mb-2">
-                        <option value="1">Activer</option>
-                        <option value="0">Suspendre</option>
-                    </select>
-
-                    <button type="submit" name="update_user_status" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Mettre à jour</button>
-                </form>
-
-                <?php
-                if (isset($_POST['validate_teacher'])) {
-                    $admin->validateTeacher($_POST['teacher_id']);
-                    echo "<p class='text-green-500 mt-2'>L'enseignant a été validé avec succès.</p>";
+    <h2 class="text-xl font-semibold mb-4">Gestion des enseignants</h2>
+    
+    <!-- Afficher les enseignants -->
+    <h3 class="font-medium mb-4">Liste des enseignants :</h3>
+    <table class="w-full border-collapse border border-gray-300">
+        <thead>
+            <tr class="bg-gray-100">
+                <th class="border border-gray-300 p-2">ID</th>
+                <th class="border border-gray-300 p-2">Nom</th>
+                <th class="border border-gray-300 p-2">Email</th>
+                <th class="border border-gray-300 p-2">Statut</th>
+                <th class="border border-gray-300 p-2">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            // Récupérer les enseignants depuis la base de données
+            $teachers = $admin->getTeachers(); // Implémentez cette méthode dans votre classe Admin
+            if (!empty($teachers)) {
+                foreach ($teachers as $teacher) {
+                    echo "<tr>
+                        <td class='border border-gray-300 p-2'>{$teacher['user_id']}</td>
+                        <td class='border border-gray-300 p-2'>{$teacher['name']}</td>
+                        <td class='border border-gray-300 p-2'>{$teacher['email']}</td>
+                        <td class='border border-gray-300 p-2'>" . ($teacher['is_active'] ? 'Actif' : 'Suspendu') . "</td>
+                        <td class='border border-gray-300 p-2'>
+                            <form action='' method='POST'>
+                                <input type='hidden' name='user_id' value='{$teacher['user_id']}'>
+                                <select name='is_active' class='border p-2 rounded'>
+                                    <option value='1'" . ($teacher['is_active'] ? ' selected' : '') . ">Activer</option>
+                                    <option value='0'" . (!$teacher['is_active'] ? ' selected' : '') . ">Suspendre</option>
+                                </select>
+                                <button type='submit' name='update_user_status' class='bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600'>Mettre à jour</button>
+                            </form>
+                        </td>
+                    </tr>";
                 }
+            } else {
+                echo "<tr><td colspan='5' class='text-center border border-gray-300 p-2'>Aucun enseignant trouvé.</td></tr>";
+            }
+            ?>
+        </tbody>
+    </table>
 
-                if (isset($_POST['update_user_status'])) {
-                    $admin->updateUserStatus($_POST['user_id'], $_POST['is_active']);
-                    echo "<p class='text-green-500 mt-2'>Le statut de l'utilisateur a été mis à jour.</p>";
-                }
-                ?>
-            </section>
-           <!-- Section Gestion des catégories -->
+    <?php
+    // Traitement du formulaire de mise à jour du statut
+    if (isset($_POST['update_user_status'])) {
+        $admin->updateUserStatus($_POST['user_id'], $_POST['is_active']);
+        echo "<p class='text-green-500 mt-2'>Le statut de l'utilisateur a été mis à jour.</p>";
+    }
+    ?>
+</section>
+ <!-- Section Gestion des catégories -->
 <section id="categories-section" class="bg-white p-4 rounded shadow">
     <h2 class="text-xl font-semibold mb-4">Gestion des catégories</h2>
     <!-- Formulaire pour ajouter une catégorie -->
