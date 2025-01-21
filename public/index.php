@@ -22,18 +22,6 @@ try {
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100">
-   <!-- Navbar -->
-   <nav class="bg-white shadow sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <a href="#" class="text-xl font-bold text-blue-600 hover:text-blue-800">Youdemy</a>
-                <div class="flex items-center space-x-4">
-                    <button onclick="toggleModal('loginModal')" class="text-gray-700 hover:text-blue-600">Log In</button>
-                    <button onclick="toggleModal('registerModal')" class="text-white bg-blue-600 px-4 py-2 rounded-md hover:bg-blue-700">Sign Up</button>
-                </div>
-            </div>
-        </div>
-    </nav>
 
     <!-- Hero Section -->
     <header class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white py-16">

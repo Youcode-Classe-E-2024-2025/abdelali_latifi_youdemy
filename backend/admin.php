@@ -118,6 +118,26 @@ class Admin extends User {
 
         return $stats;
     }
+
+    public function getCategories() {
+        $sql = "SELECT category_id, name FROM categories";
+        $stmt = $this->db->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getTags() {
+        $sql = "SELECT tag_id, name FROM tags";
+        $stmt = $this->db->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Méthode pour supprimer un tag
+    public function deleteTag($tag_id) {
+        $sql = "DELETE FROM tags WHERE tag_id = :tag_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([':tag_id' => $tag_id]);
+        return $stmt->rowCount(); // Retourne le nombre de lignes affectées
+    }
     
 }
 

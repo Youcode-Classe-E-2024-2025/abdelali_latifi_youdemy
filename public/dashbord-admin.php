@@ -17,8 +17,7 @@
         <aside class="bg-gray-200 w-64 p-4 h-screen">
             <h2 class="text-lg font-semibold mb-4">Navigation rapide</h2>
             <ul class="space-y-2">
-                <li><a href="#users-section" class="block p-2 bg-blue-500 text-white rounded hover:bg-blue-600">Gestion des utilisateurs</a></li>
-                <li><a href="#courses-section" class="block p-2 bg-blue-500 text-white rounded hover:bg-blue-600">Gestion des cours</a></li>
+                <li><a href="../public/course-manager.php" class="block p-2 bg-blue-500 text-white rounded hover:bg-blue-600">Gestion des cours</a></li>
                 <li><a href="#categories-section" class="block p-2 bg-blue-500 text-white rounded hover:bg-blue-600">Gestion des catégories</a></li>
                 <li><a href="#tags-section" class="block p-2 bg-blue-500 text-white rounded hover:bg-blue-600">Gestion des tags</a></li>
                 <li><a href="#stats-section" class="block p-2 bg-blue-500 text-white rounded hover:bg-blue-600">Statistiques globales</a></li>
@@ -66,68 +65,98 @@
                 }
                 ?>
             </section>
+           <!-- Section Gestion des catégories -->
+<section id="categories-section" class="bg-white p-4 rounded shadow">
+    <h2 class="text-xl font-semibold mb-4">Gestion des catégories</h2>
+    <!-- Formulaire pour ajouter une catégorie -->
+    <form action="" method="POST" class="mb-4">
+        <label for="category_name" class="block font-medium">Nom de la catégorie :</label>
+        <input type="text" name="category_name" id="category_name" class="border p-2 rounded w-full mb-2" required>
+        <button type="submit" name="add_category" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Ajouter la catégorie</button>
+    </form>
+    <!-- Affichage des catégories existantes avec un bouton de suppression -->
+    <h3 class="font-medium mb-2">Catégories existantes :</h3>
+    <ul class="space-y-2">
+        <?php
+        // Récupération des catégories depuis la base de données
+        $categories = $admin->getCategories(); // Appeler une méthode pour récupérer les catégories
+        if (!empty($categories)) {
+            foreach ($categories as $category) {
+                echo "<li class='flex justify-between items-center'>
+                        <span>{$category['name']}</span>
+                        <form action='' method='POST' class='inline'>
+                            <input type='hidden' name='category_id' value='{$category['category_id']}'>
+                            <button type='submit' name='delete_category' class='bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600'>Supprimer</button>
+                        </form>
+                    </li>";
+            }
+        } else {
+            echo "<li>Aucune catégorie disponible.</li>";
+        }
+        ?>
+    </ul>
 
-            <!-- Section Gestion des cours -->
-            <section id="courses-section" class="bg-white p-4 rounded shadow">
-                <h2 class="text-xl font-semibold mb-4">Gestion des cours</h2>
-                <form action="" method="POST">
-                    <label for="course_id" class="block font-medium">ID du cours :</label>
-                    <input type="number" name="course_id" id="course_id" class="border p-2 rounded w-full mb-2" required>
-                    <button type="submit" name="delete_course" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Supprimer le cours</button>
-                </form>
+    <?php
+    // Traitement du formulaire d'ajout de catégorie
+    if (isset($_POST['add_category'])) {
+        $admin->addCategory($_POST['category_name']);
+        echo "<p class='text-green-500 mt-2'>La catégorie a été ajoutée avec succès.</p>";
+    }
 
-                <?php
-                if (isset($_POST['delete_course'])) {
-                    $admin->deleteCourse($_POST['course_id']);
-                    echo "<p class='text-green-500 mt-2'>Le cours a été supprimé avec succès.</p>";
-                }
-                ?>
-            </section>
+    if (isset($_POST['delete_category'])) {
+        $admin->deleteCategory($_POST['category_id']);
+        echo "<p class='text-green-500 mt-2'>La catégorie a été supprimée avec succès.</p>";
+    }
+    ?>
+</section>
 
-            <!-- Section Gestion des catégories -->
-            <section id="categories-section" class="bg-white p-4 rounded shadow">
-                <h2 class="text-xl font-semibold mb-4">Gestion des catégories</h2>
-                <form action="" method="POST" class="mb-4">
-                    <label for="category_name" class="block font-medium">Nom de la catégorie :</label>
-                    <input type="text" name="category_name" id="category_name" class="border p-2 rounded w-full mb-2" required>
-                    <button type="submit" name="add_category" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Ajouter la catégorie</button>
-                </form>
+       <!-- Section Gestion des tags -->
+<section id="tags-section" class="bg-white p-4 rounded shadow">
+    <h2 class="text-xl font-semibold mb-4">Gestion des tags</h2>
+    <!-- Formulaire pour ajouter des tags en masse -->
+    <form action="" method="POST">
+        <label for="tags" class="block font-medium">Tags (séparés par des virgules) :</label>
+        <textarea name="tags" id="tags" rows="3" class="border p-2 rounded w-full mb-2" required></textarea>
+        <button type="submit" name="bulk_insert_tags" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Insérer en masse</button>
+    </form>
 
-                <form action="" method="POST">
-                    <label for="category_id" class="block font-medium">ID de la catégorie :</label>
-                    <input type="number" name="category_id" id="category_id" class="border p-2 rounded w-full mb-2" required>
-                    <button type="submit" name="delete_category" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Supprimer la catégorie</button>
-                </form>
+    <!-- Affichage des tags existants avec un bouton de suppression -->
+    <h3 class="font-medium mb-2">Tags existants :</h3>
+    <ul class="space-y-2">
+        <?php
+        // Récupérer les tags depuis la base de données
+        $tags = $admin->getTags(); // Appeler une méthode pour récupérer les tags
+        if (!empty($tags)) {
+            foreach ($tags as $tag) {
+                echo "<li class='flex justify-between items-center'>
+                        <span>{$tag['name']}</span>
+                        <form action='' method='POST' class='inline'>
+                            <input type='hidden' name='tag_id' value='{$tag['tag_id']}'>
+                            <button type='submit' name='delete_tag' class='bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600'>Supprimer</button>
+                        </form>
+                    </li>";
+            }
+        } else {
+            echo "<li>Aucun tag disponible.</li>";
+        }
+        ?>
+    </ul>
 
-                <?php
-                if (isset($_POST['add_category'])) {
-                    $admin->addCategory($_POST['category_name']);
-                    echo "<p class='text-green-500 mt-2'>La catégorie a été ajoutée avec succès.</p>";
-                }
+    <?php
+    // Traitement du formulaire d'ajout de tags
+    if (isset($_POST['bulk_insert_tags'])) {
+        $admin->bulkInsertTags($_POST['tags']);
+        echo "<p class='text-green-500 mt-2'>Les tags ont été ajoutés avec succès.</p>";
+    }
 
-                if (isset($_POST['delete_category'])) {
-                    $admin->deleteCategory($_POST['category_id']);
-                    echo "<p class='text-green-500 mt-2'>La catégorie a été supprimée avec succès.</p>";
-                }
-                ?>
-            </section>
+    // Traitement du formulaire de suppression de tag
+    if (isset($_POST['delete_tag'])) {
+        $admin->deleteTag($_POST['tag_id']);
+        echo "<p class='text-green-500 mt-2'>Le tag a été supprimé avec succès.</p>";
+    }
+    ?>
+</section>
 
-            <!-- Section Gestion des tags -->
-            <section id="tags-section" class="bg-white p-4 rounded shadow">
-                <h2 class="text-xl font-semibold mb-4">Gestion des tags</h2>
-                <form action="" method="POST">
-                    <label for="tags" class="block font-medium">Tags (séparés par des virgules) :</label>
-                    <textarea name="tags" id="tags" rows="3" class="border p-2 rounded w-full mb-2" required></textarea>
-                    <button type="submit" name="bulk_insert_tags" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Insérer en masse</button>
-                </form>
-
-                <?php
-                if (isset($_POST['bulk_insert_tags'])) {
-                    $admin->bulkInsertTags($_POST['tags']);
-                    echo "<p class='text-green-500 mt-2'>Les tags ont été ajoutés avec succès.</p>";
-                }
-                ?>
-            </section>
 
             <!-- Section Statistiques globales -->
             <section id="stats-section" class="bg-white p-4 rounded shadow">
@@ -155,10 +184,5 @@
             </section>
         </main>
     </div>
-
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white text-center p-4 mt-8">
-        <p>&copy; 2025 Youdemy. Tous droits réservés.</p>
-    </footer>
 </body>
 </html>
