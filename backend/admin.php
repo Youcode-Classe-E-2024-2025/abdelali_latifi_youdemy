@@ -4,6 +4,10 @@ require_once '../backend/user.php';
 
 class Admin extends User {
 
+    public function __construct() {
+        parent::__construct();
+    }
+
     // Validation des comptes enseignants
     public function validateTeacher($teacher_id) {
         $sql = "UPDATE users SET is_active = TRUE WHERE user_id = :teacher_id AND role = 'Teacher';";
@@ -32,12 +36,19 @@ class Admin extends User {
 
     // Gestion des cours, catégories et tags
     public function deleteCourse($course_id) {
+        // Supprimer les dépendances dans la table enrollments
+        $sql = "DELETE FROM enrollments WHERE course_id = :course_id;";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([':course_id' => $course_id]);
+    
+        // Supprimer le cours
         $sql = "DELETE FROM courses WHERE course_id = :course_id;";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':course_id' => $course_id]);
+    
         return $stmt->rowCount();
     }
-
+    
     public function addCategory($name) {
         $sql = "INSERT INTO categories (name) VALUES (:name);";
         $stmt = $this->db->prepare($sql);
@@ -107,6 +118,7 @@ class Admin extends User {
 
         return $stats;
     }
+    
 }
 
 ?>
