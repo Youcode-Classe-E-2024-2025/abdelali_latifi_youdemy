@@ -5,10 +5,28 @@ require_once '../backend/courses.php';
 $page = new Etudiant();
 $courseManeger = new Course();
 
+// Nombre de résultats par page
+$perPage = 3;
+
+// Page actuelle (par défaut, la page 1)
+$pageNum = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+
+// Mot-clé de recherche, s'il y en a
 $searchKeyword = isset($_GET['search']) ? htmlspecialchars(trim($_GET['search'])) : '' ;
 
 try {
-    $courses = $searchKeyword ? $courseManeger->searchCourses($searchKeyword) : $courseManeger->getAllCourses();
+    // Si un mot-clé est donné, on applique la recherche avec pagination
+    if ($searchKeyword) {
+        $courses = $courseManeger->searchCoursesPaginated($searchKeyword, $pageNum, $perPage);
+        $totalCourses = $courseManeger->getTotalCourses($searchKeyword);
+    } else {
+        // Sinon, on récupère tous les cours avec pagination
+        $courses = $courseManeger->getCoursesPaginated($pageNum, $perPage);
+        $totalCourses = $courseManeger->getTotalCourses();
+    }
+
+    // Calcul du nombre total de pages
+    $totalPages = ceil($totalCourses / $perPage);
 } catch(Exception $e) {
     die ("Erreur lors de la récupération des cours : " . $e->getMessage());
 }
@@ -28,7 +46,6 @@ try {
         <div class="flex justify-between items-center h-16">
             <a href="#" class="text-xl font-bold text-blue-600 hover:text-blue-800">Student Dashboard</a>
             <div class="flex space-x-4">
-                <!-- Lien vers My Courses -->
                 <a href="my-courses.php" class="text-blue-600 hover:text-blue-800">My Courses</a>
                 <a href="../backend/athentification/logout.php">
                     <button class="text-white bg-red-600 px-4 py-2 rounded-md hover:bg-red-700">
@@ -39,7 +56,6 @@ try {
         </div>
     </div>
 </nav>
-
 
     <!-- Hero Section -->
     <header class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white py-16">
@@ -92,6 +108,42 @@ try {
                 <?php endif; ?>
             </div>
         </div>
+
+        <!-- Pagination -->
+        <?php if ($totalPages > 1): ?>
+            <div class="mt-8 flex justify-center">
+                <nav aria-label="Pagination">
+                    <ul class="flex space-x-2">
+                        <!-- Lien vers la page précédente -->
+                        <?php if ($pageNum > 1): ?>
+                            <li>
+                                <a href="?page=<?= $pageNum - 1 ?>&search=<?= urlencode($searchKeyword) ?>" class="px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-md">
+                                    &laquo; Previous
+                                </a>
+                            </li>
+                        <?php endif; ?>
+
+                        <!-- Lien vers les pages suivantes -->
+                        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                            <li>
+                                <a href="?page=<?= $i ?>&search=<?= urlencode($searchKeyword) ?>" class="px-4 py-2 text-white <?= $i == $pageNum ? 'bg-blue-700' : 'bg-blue-600' ?> hover:bg-blue-700 rounded-md">
+                                    <?= $i ?>
+                                </a>
+                            </li>
+                        <?php endfor; ?>
+
+                        <!-- Lien vers la page suivante -->
+                        <?php if ($pageNum < $totalPages): ?>
+                            <li>
+                                <a href="?page=<?= $pageNum + 1 ?>&search=<?= urlencode($searchKeyword) ?>" class="px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-md">
+                                    Next &raquo;
+                                </a>
+                            </li>
+                        <?php endif; ?>
+                    </ul>
+                </nav>
+            </div>
+        <?php endif; ?>
     </main>
 </body>
 </html>
