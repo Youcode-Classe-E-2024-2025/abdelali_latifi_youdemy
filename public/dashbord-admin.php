@@ -8,9 +8,17 @@
 </head>
 <body class="bg-gray-100 text-gray-800">
     <!-- Header -->
-    <header class="bg-blue-600 text-white p-4">
-        <h1 class="text-2xl font-bold">Admin Dashboard</h1>
-    </header>
+    <header class="bg-blue-600 text-white p-4 flex justify-between items-center">
+    <h1 class="text-2xl font-bold">Admin Dashboard</h1>
+    
+    <!-- Bouton de Logout -->
+    <form action="../backend/athentification/logout.php" method="POST" class="inline">
+        <button type="submit" name="logout" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400">
+            Logout
+        </button>
+    </form>
+</header>
+
 
     <div class="flex">
         <!-- Aside (Menu latéral) -->

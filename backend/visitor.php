@@ -18,14 +18,5 @@ class Visiteur extends User {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
-    // Créer un compte
-    public function createAccount($name, $email, $password, $role) {
-        if ($role != 'Student' && $role != 'Teacher') {
-            return 'Rôle non valide';
-        }
-        $registration = new registre();
-        return $registration->registration($name, $email, $password, $role);
-    }
 }
 ?>

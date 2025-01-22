@@ -3,16 +3,35 @@ require_once '../backend/student.php';
 require_once '../backend/courses.php';
 
 $page = new Etudiant();
-$courseManeger = new Course();
+$courseManager = new Course();
 
-$searchKeyword = isset($_GET['search']) ? htmlspecialchars(trim($_GET['search'])) : '' ;
+// Nombre de résultats par page
+$perPage = 3;
+
+// Page actuelle (par défaut, la page 1)
+$pageNum = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+
+// Mot-clé de recherche, s'il y en a
+$searchKeyword = isset($_GET['search']) ? htmlspecialchars(trim($_GET['search'])) : '';
 
 try {
-    $courses = $searchKeyword ? $courseManeger->searchCourses($searchKeyword) : $courseManeger->getAllCourses();
+    // Si un mot-clé est donné, on applique la recherche avec pagination
+    if ($searchKeyword) {
+        $courses = $courseManager->searchCoursesPaginated($searchKeyword, $pageNum, $perPage);
+        $totalCourses = $courseManager->getTotalCourses($searchKeyword);
+    } else {
+        // Sinon, on récupère tous les cours avec pagination
+        $courses = $courseManager->getCoursesPaginated($pageNum, $perPage);
+        $totalCourses = $courseManager->getTotalCourses();
+    }
+
+    // Calcul du nombre total de pages
+    $totalPages = ceil($totalCourses / $perPage);
 } catch(Exception $e) {
     die("Erreur lors de la récupération des cours : " . $e->getMessage());
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,6 +41,18 @@ try {
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100">
+   <!-- Navbar -->
+   <nav class="bg-white shadow sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="#" class="text-xl font-bold text-blue-600 hover:text-blue-800">Youdemy</a>
+                <div class="flex items-center space-x-4">
+                    <button onclick="toggleModal('loginModal')" class="text-gray-700 hover:text-blue-600">Log In</button>
+                    <button onclick="toggleModal('registerModal')" class="text-white bg-blue-600 px-4 py-2 rounded-md hover:bg-blue-700">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </nav>
 
     <!-- Hero Section -->
     <header class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white py-16">
@@ -46,36 +77,72 @@ try {
     </header>
 
     <main class="py-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold text-gray-700 mb-6">Featured Courses</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-                <?php if (!empty($courses)): ?>
-                    <?php foreach ($courses as $course): ?>
-                        <div class="card bg-white shadow-lg rounded-lg overflow-hidden">
-                            <div class="p-4">
-                                <h3 class="text-xl font-semibold text-gray-800">
-                                    <?= htmlspecialchars($course['title']) ?>
-                                </h3>
-                                <p class="text-sm text-gray-600 mt-2">
-                                    <?= htmlspecialchars($course['description']) ?>
-                                </p>
-                                <span class="text-sm text-gray-500 block mt-2">
-                                    Category: <?= htmlspecialchars($course['category_name']) ?>
-                                </span>
-                                <div class="mt-4">
-                                    <a onclick="toggleModal('loginModal')"<?= htmlspecialchars($course['course_id']) ?> class="text-blue-600 font-medium hover:underline">
-                                        View Details
-                                    </a>
-                                </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold text-gray-700 mb-6">Featured Courses</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+            <?php if (!empty($courses)): ?>
+                <?php foreach ($courses as $course): ?>
+                    <div class="card bg-white shadow-lg rounded-lg overflow-hidden">
+                        <div class="p-4">
+                            <h3 class="text-xl font-semibold text-gray-800">
+                                <?= htmlspecialchars($course['title']) ?>
+                            </h3>
+                            <p class="text-sm text-gray-600 mt-2">
+                                <?= htmlspecialchars($course['description']) ?>
+                            </p>
+                            <span class="text-sm text-gray-500 block mt-2">
+                                Category: <?= htmlspecialchars($course['category_name']) ?>
+                            </span>
+                            <div class="mt-4">
+                                <a onclick="toggleModal('loginModal')" class="text-blue-600 font-medium hover:underline">
+                                    View Details
+                                </a>
                             </div>
                         </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <p class="text-gray-600">No courses found for "<strong><?= htmlspecialchars($searchKeyword) ?></strong>".</p>
-                <?php endif; ?>
-            </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p class="text-gray-600">No courses found for "<strong><?= htmlspecialchars($searchKeyword) ?></strong>".</p>
+            <?php endif; ?>
         </div>
-    </main>
+
+        <!-- Pagination -->
+        <?php if ($totalPages > 1): ?>
+            <div class="mt-8 flex justify-center">
+                <nav aria-label="Pagination">
+                    <ul class="flex space-x-2">
+                        <!-- Lien vers la page précédente -->
+                        <?php if ($pageNum > 1): ?>
+                            <li>
+                                <a href="?page=<?= $pageNum - 1 ?>&search=<?= urlencode($searchKeyword) ?>" class="px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-md">
+                                    &laquo; Previous
+                                </a>
+                            </li>
+                        <?php endif; ?>
+
+                        <!-- Lien vers les pages suivantes -->
+                        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                            <li>
+                                <a href="?page=<?= $i ?>&search=<?= urlencode($searchKeyword) ?>" class="px-4 py-2 text-white <?= $i == $pageNum ? 'bg-blue-700' : 'bg-blue-600' ?> hover:bg-blue-700 rounded-md">
+                                    <?= $i ?>
+                                </a>
+                            </li>
+                        <?php endfor; ?>
+
+                        <!-- Lien vers la page suivante -->
+                        <?php if ($pageNum < $totalPages): ?>
+                            <li>
+                                <a href="?page=<?= $pageNum + 1 ?>&search=<?= urlencode($searchKeyword) ?>" class="px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-md">
+                                    Next &raquo;
+                                </a>
+                            </li>
+                        <?php endif; ?>
+                    </ul>
+                </nav>
+            </div>
+        <?php endif; ?>
+    </div>
+</main>
 
     <!-- Login Modal -->
 <div id="loginModal" class="hidden flex fixed inset-0 bg-gray-900 bg-opacity-50 justify-center items-center z-50">
