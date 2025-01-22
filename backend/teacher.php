@@ -6,10 +6,10 @@ class Enseignant  extends User {
     private $pdo;
 
     public function __construct() {
-        $this->pdo = new PDO('mysql:host=localhost;dbname=Youdemy', 'root', ''); // Mettez vos informations de connexion ici
+        $this->pdo = new PDO('mysql:host=localhost;dbname=Youdemy', 'root', ''); 
     }
 
-    public function addCourse($title, $description, $content, $tags, $category_id, $teacher_id) {
+    public function addCourse($title, $description, $content, $category_id, $teacher_id) {
         $sql = "INSERT INTO courses (title, description, content, category_id, teacher_id) 
                 VALUES (:title, :description, :content, :category_id, :teacher_id)";
         

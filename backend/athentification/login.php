@@ -19,9 +19,7 @@ if(isset($_POST['submit'])){
 
             $result = $login->login($name, $password);
             if ($result === 10) {
-                $error = 'Incorrect password.';
-                header('Location: ../../public/index.php?error=' . urlencode($error));
-                exit;
+                header('location: ../../public/dashbord-admin.php');               
             } elseif ($result === 100) {
                 $error = 'User not found.';
                 header('Location: ../../public/index.php?error=' . urlencode($error));

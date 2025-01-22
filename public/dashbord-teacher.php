@@ -1,10 +1,6 @@
 <?php
 session_start();
-
-if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'Teacher') {
-    header('Location: login.php'); 
-    exit;
-}
+!isset($_SESSION['role']) || $_SESSION['role'] !== 'Teacher' ? header(header: 'Location: index.php') :'';
 
 $teacher_id = $_SESSION['student_id']; 
 require_once '../backend/courses.php';
@@ -18,11 +14,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_course'])) {
     $title = htmlspecialchars(trim($_POST['title']));
     $description = htmlspecialchars(trim($_POST['description']));
     $content = htmlspecialchars(trim($_POST['content']));
-    $tags = htmlspecialchars(trim($_POST['tags']));
     $category = (int) $_POST['category'];
 
     try {
-        $courseManager->addCourse($title, $description, $content, $tags, $category, $teacher_id);
+        $courseManager->addCourse($title, $description, $content, $category, $teacher_id);
         $message = "Course added successfully!";
     } catch (Exception $e) {
         $error = "Error adding course: " . $e->getMessage();
@@ -100,7 +95,6 @@ $stats = $courseManager->getCourseStatistics($teacher_id);
                         <input type="text" name="title" placeholder="Course Title" class="px-4 py-2 rounded-md border border-gray-300 w-full mb-4" required>
                         <textarea name="description" placeholder="Course Description" class="px-4 py-2 rounded-md border border-gray-300 w-full mb-4" required></textarea>
                         <textarea name="content" placeholder="Course Content" class="px-4 py-2 rounded-md border border-gray-300 w-full mb-4" required></textarea>
-                        <input type="text" name="tags" placeholder="Course Tags" class="px-4 py-2 rounded-md border border-gray-300 w-full mb-4">
                         <select name="category" class="px-4 py-2 rounded-md border border-gray-300 w-full mb-4" required>
                             <option value="">Select Category</option>
                             <option value="1">Programming</option>

@@ -104,3 +104,5 @@ INSERT INTO enrollments (course_id, student_id) VALUES
 (2, 3), -- Alice Johnson inscrit à "UI/UX Design Basics"
 (3, 1), -- John Doe inscrit à "Entrepreneurship 101"
 (4, 3); -- Alice Johnson inscrit à "Digital Marketing Strategies"
+
+

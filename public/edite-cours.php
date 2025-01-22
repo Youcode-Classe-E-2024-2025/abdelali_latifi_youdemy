@@ -34,8 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = htmlspecialchars(trim($_POST['title']));
     $description = htmlspecialchars(trim($_POST['description']));
     $content = htmlspecialchars(trim($_POST['content']));
-    $tags = htmlspecialchars(trim($_POST['tags']));
-    $category_id = (int)$_POST['category'];
+     $category_id = (int)$_POST['category'];
 
     if (strlen($title) > 255) {
         $error = "The title cannot exceed 255 characters.";
@@ -79,7 +78,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="text" name="title" value="<?= htmlspecialchars($course['title']) ?>" placeholder="Course Title" class="w-full px-4 py-2 mb-4 border rounded" required>
                 <textarea name="description" placeholder="Course Description" class="w-full px-4 py-2 mb-4 border rounded" required><?= htmlspecialchars($course['description']) ?></textarea>
                 <textarea name="content" placeholder="Course Content" class="w-full px-4 py-2 mb-4 border rounded" required><?= htmlspecialchars($course['content']) ?></textarea>
-                <input type="text" name="tags" value="<?= htmlspecialchars($course['tags']) ?>" placeholder="Tags (comma-separated)" class="w-full px-4 py-2 mb-4 border rounded">
                 <select name="category" class="w-full px-4 py-2 mb-4 border rounded" required>
                     <option value="">Select Category</option>
                     <option value="1" <?= $course['category_id'] == 1 ? 'selected' : '' ?>>Programming</option>

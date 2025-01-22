@@ -62,15 +62,15 @@ class login extends Database {
                         header('location: ../../public/dashbord-teacher.php');
                         break;
                     case 'Administrator':
-                        header('location: ../../public/administor.php');
+                        header('location: ../../public/dashbord-admin.php');
                         break;    
                 }
                 exit;
             } else {
-                return 10; // Mot de passe incorrect
+                return 10; 
             }
         } else {
-            return 100; // Utilisateur non trouvé
+            return 100; 
         }
     }
 }

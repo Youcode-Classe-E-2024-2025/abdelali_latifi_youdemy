@@ -2,6 +2,9 @@
 require_once '../backend/student.php'; 
 require_once '../backend/courses.php';
 
+session_start();
+!isset($_SESSION['role']) || $_SESSION['role'] !== 'Student' ? header(header: 'Location: index.php') :'';
+
 $page = new Etudiant();
 $courseManeger = new Course();
 
