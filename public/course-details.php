@@ -63,8 +63,8 @@ try {
         </div>
         <div class="mt-6">
             <h2 class="text-2xl font-semibold text-gray-800">Course Content</h2>
-            <p class="mt-2 text-gray-700 leading-relaxed">
-                <?= nl2br(htmlspecialchars($courseDetails['content'])) ?>
+            <p class="mt-2 text-blue-700 leading-relaxed ">
+                <a href="<?= nl2br(htmlspecialchars($courseDetails['content'])) ?>"><?= nl2br(htmlspecialchars($courseDetails['content'])) ?></a>
             </p>
         </div>
         <div class="text-center mt-10">

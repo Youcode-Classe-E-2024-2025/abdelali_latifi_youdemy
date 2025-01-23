@@ -1,6 +1,5 @@
 <?php 
 session_start();
-!isset($_SESSION['role']) || $_SESSION['role'] !== 'Administrator' ? header(header: 'Location: index.php') :'';
 ?>
 <!DOCTYPE html>
 <html lang="en">
