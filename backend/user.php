@@ -9,7 +9,6 @@ class User extends Database {
         $this->db = $this->getConnection();
     }
 
-    // Récupérer tous les cours
     public function getCourses() {
         $query = "SELECT course_id, title, description FROM courses";
         $stmt = $this->db->prepare($query);
@@ -17,7 +16,6 @@ class User extends Database {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Récupérer les détails d'un cours 
     public function getCourseDetails($course_id) {
         $query = "
             SELECT courses.course_id, courses.title, courses.description, courses.content, categories.name AS category_name
