@@ -31,14 +31,7 @@ class User extends Database {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // rechercher un cours par mot-clé
-    public function searchCourses($keyword) {
-        $query = "SELECT * FROM courses WHERE title LIKE :keyword OR description LIKE :keyword";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindValue(':keyword', '%'.$keyword.'%', PDO::PARAM_STR);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+   
 
     public function getCategories() {
         $query = "SELECT category_id, name FROM categories";
