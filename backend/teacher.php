@@ -27,7 +27,6 @@ class Enseignant  extends User {
     }
 
 
-    //  les statistiques
     public function getCourseStatistics($teacher_id) {
         $sql = "SELECT COUNT(c.course_id) AS total_courses, 
                        COUNT(e.student_id) AS total_students
@@ -41,7 +40,6 @@ class Enseignant  extends User {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // Récupérer les cours d'un enseignant
     public function getCoursesByTeacher($teacher_id) {
         $sql = "SELECT c.course_id, c.title, c.description, cat.name AS category_name 
                 FROM courses c
@@ -55,12 +53,10 @@ class Enseignant  extends User {
     }
 
     public function deleteCourse($course_id, $teacher_id) {
-        // Supprimer les associations dans course_tags
         $sql = "DELETE FROM course_tags WHERE course_id = :course_id";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':course_id' => $course_id]);
     
-        // Ensuite, supprimer le cours
         $sql = "DELETE FROM courses WHERE course_id = :course_id AND teacher_id = :teacher_id";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([

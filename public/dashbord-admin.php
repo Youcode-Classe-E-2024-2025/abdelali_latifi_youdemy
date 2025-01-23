@@ -13,18 +13,13 @@ session_start();
     <!-- Header -->
     <header class="bg-blue-600 text-white p-4 flex justify-between items-center">
     <h1 class="text-2xl font-bold">Admin Dashboard</h1>
-    
-    <!-- Bouton de Logout -->
-    <form action="../backend/athentification/logout.php" method="POST" class="inline">
+        <form action="../backend/athentification/logout.php" method="POST" class="inline">
         <button type="submit" name="logout" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400">
             Logout
         </button>
     </form>
 </header>
-
-
     <div class="flex">
-        <!-- Aside (Menu latéral) -->
         <aside class="bg-gray-200 w-64 p-4 h-screen">
             <h2 class="text-lg font-semibold mb-4">Navigation rapide</h2>
             <ul class="space-y-2">
@@ -34,15 +29,12 @@ session_start();
                 <li><a href="#stats-section" class="block p-2 bg-blue-500 text-white rounded hover:bg-blue-600">Statistiques globales</a></li>
             </ul>
         </aside>
-
-        <!-- Main Content -->
         <main class="p-6 flex-1 space-y-8">
             <?php
             require_once '../backend/admin.php';
             $admin = new Admin();
             ?>
 
-            <!-- Section Gestion des utilisateurs -->
             <section id="users-section" class="bg-white p-4 rounded shadow">
     <h2 class="text-xl font-semibold mb-4">Gestion des enseignants</h2>
     
@@ -60,8 +52,7 @@ session_start();
         </thead>
         <tbody>
             <?php
-            // Récupérer les enseignants depuis la base de données
-            $teachers = $admin->getTeachers(); // Implémentez cette méthode dans votre classe Admin
+            $teachers = $admin->getTeachers(); 
             if (!empty($teachers)) {
                 foreach ($teachers as $teacher) {
                     echo "<tr>
@@ -95,32 +86,26 @@ session_start();
     </table>
 
     <?php
-    // Traitement du formulaire de mise à jour du statut
     if (isset($_POST['update_user_status'])) {
         $admin->updateUserStatus($_POST['user_id'], $_POST['is_active']);
         echo "<p class='text-green-500 mt-2'>Le statut de l'utilisateur a été mis à jour.</p>";
     }
 
-    // Traitement du formulaire de suppression
     if (isset($_POST['delete_teacher'])) {
         $admin->deleteTeacher($_POST['user_id']);
         echo "<p class='text-red-500 mt-2'>L'enseignant a été supprimé avec succès.</p>";
     }
     ?>
 </section>
-
- <!-- Section Gestion des catégories -->
 <!-- Section Gestion des catégories -->
 <section id="categories-section" class="bg-white p-4 rounded-lg shadow-lg mb-8">
     <h2 class="text-xl font-semibold mb-4 text-gray-800">Gestion des catégories</h2>
-    <!-- Formulaire pour ajouter une catégorie -->
     <form action="" method="POST" class="mb-6">
         <label for="category_name" class="block font-medium text-gray-700 mb-2">Nom de la catégorie :</label>
         <input type="text" name="category_name" id="category_name" class="border p-3 rounded w-full mb-4 focus:ring-2 focus:ring-blue-500" required>
         <button type="submit" name="add_category" class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">Ajouter la catégorie</button>
     </form>
 
-    <!-- Affichage des catégories existantes avec un bouton de suppression -->
     <h3 class="font-medium mb-2 text-gray-800">Catégories existantes :</h3>
     <div class="max-h-72 overflow-y-auto space-y-4">
         <?php
