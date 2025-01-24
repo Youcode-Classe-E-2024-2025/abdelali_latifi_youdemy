@@ -8,27 +8,21 @@ session_start();
 $page = new Etudiant();
 $courseManeger = new Course();
 
-// Nombre de résultats par page
 $perPage = 3;
 
-// Page actuelle (par défaut, la page 1)
 $pageNum = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 
-// Mot-clé de recherche, s'il y en a
 $searchKeyword = isset($_GET['search']) ? htmlspecialchars(trim($_GET['search'])) : '' ;
 
 try {
-    // Si un mot-clé est donné, on applique la recherche avec pagination
     if ($searchKeyword) {
         $courses = $courseManeger->searchCoursesPaginated($searchKeyword, $pageNum, $perPage);
         $totalCourses = $courseManeger->getTotalCourses($searchKeyword);
     } else {
-        // Sinon, on récupère tous les cours avec pagination
         $courses = $courseManeger->getCoursesPaginated($pageNum, $perPage);
         $totalCourses = $courseManeger->getTotalCourses();
     }
 
-    // Calcul du nombre total de pages
     $totalPages = ceil($totalCourses / $perPage);
 } catch(Exception $e) {
     die ("Erreur lors de la récupération des cours : " . $e->getMessage());
@@ -117,7 +111,6 @@ try {
             <div class="mt-8 flex justify-center">
                 <nav aria-label="Pagination">
                     <ul class="flex space-x-2">
-                        <!-- Lien vers la page précédente -->
                         <?php if ($pageNum > 1): ?>
                             <li>
                                 <a href="?page=<?= $pageNum - 1 ?>&search=<?= urlencode($searchKeyword) ?>" class="px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-md">
@@ -125,8 +118,7 @@ try {
                                 </a>
                             </li>
                         <?php endif; ?>
-
-                        <!-- Lien vers les pages suivantes -->
+                        <!-- les pages suivantes -->
                         <?php for ($i = 1; $i <= $totalPages; $i++): ?>
                             <li>
                                 <a href="?page=<?= $i ?>&search=<?= urlencode($searchKeyword) ?>" class="px-4 py-2 text-white <?= $i == $pageNum ? 'bg-blue-700' : 'bg-blue-600' ?> hover:bg-blue-700 rounded-md">
@@ -135,7 +127,7 @@ try {
                             </li>
                         <?php endfor; ?>
 
-                        <!-- Lien vers la page suivante -->
+                        <!--la page suivante -->
                         <?php if ($pageNum < $totalPages): ?>
                             <li>
                                 <a href="?page=<?= $pageNum + 1 ?>&search=<?= urlencode($searchKeyword) ?>" class="px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-md">

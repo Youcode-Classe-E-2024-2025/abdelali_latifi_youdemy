@@ -17,14 +17,6 @@ class Admin extends User {
         ]);
         return $stmt->rowCount();
     }
-
-    public function deleteUser($user_id) {
-        $sql = "DELETE FROM users WHERE user_id = :user_id;";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([':user_id' => $user_id]);
-        return $stmt->rowCount();
-    }
-
     public function deleteCourse($course_id) {
         $sql = "DELETE FROM enrollments WHERE course_id = :course_id;";
         $stmt = $this->db->prepare($sql);

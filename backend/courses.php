@@ -16,7 +16,7 @@ class Course {
                     courses.course_id, 
                     courses.title, 
                     courses.description, 
-                    categories.name AS category_name  -- correction ici
+                    categories.name AS category_name  
                 FROM courses
                 INNER JOIN categories ON courses.category_id = categories.category_id
             ";
@@ -37,7 +37,7 @@ class Course {
                     courses.course_id, 
                     courses.title, 
                     courses.description, 
-                    categories.name AS category_name  -- correction ici
+                    categories.name AS category_name  
                 FROM courses
                 INNER JOIN categories ON courses.category_id = categories.category_id
                 WHERE courses.title LIKE :keyword OR courses.description LIKE :keyword

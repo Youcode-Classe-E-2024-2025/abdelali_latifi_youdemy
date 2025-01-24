@@ -81,9 +81,7 @@ $stats = $courseManager->getCourseStatistics($teacher_id);
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-3xl font-bold text-gray-700 mb-6">My Courses</h2>
 
-            <!-- Add New Course Button -->
             <button id="openModalButton" class="bg-blue-600 text-white px-6 py-3 rounded-md mt-4">Add Course</button>
-
             <!-- The Modal -->
             <div id="courseModal" class="fixed inset-0 flex items-center justify-center z-50 hidden bg-gray-500 bg-opacity-50">
                 <div class="bg-white p-6 rounded-lg w-96">
@@ -124,12 +122,9 @@ $stats = $courseManager->getCourseStatistics($teacher_id);
                     <span class="text-sm text-gray-500">Category: <?= htmlspecialchars($course['category_name']) ?></span>
 
                     <div class="flex space-x-3 mt-4">
-                        <!-- Petit bouton Modifier -->
                         <a href="../public/edite-cours.php?id=<?= htmlspecialchars($course['course_id']) ?>" class="bg-blue-600 text-white text-sm px-4 py-2 rounded-md text-center hover:bg-blue-700 transition duration-200">
                             Modify
                         </a>
-                        
-                        <!-- Petit bouton Supprimer -->
                         <form action="#" method="POST" class="flex-1">
                             <input type="hidden" name="course_id" value="<?= htmlspecialchars($course['course_id']) ?>">
                             <button type="submit" name="delete_course" class="bg-red-600 text-white text-sm px-4 py-2 rounded-md text-center hover:bg-red-700 transition duration-200">
@@ -144,9 +139,6 @@ $stats = $courseManager->getCourseStatistics($teacher_id);
         <p class="text-gray-600">You don't have any courses yet. Start by adding a new one!</p>
     <?php endif; ?>
 </div>
-
-
-            <!-- Course Statistics -->
             <h2 class="text-3xl font-bold text-gray-700 mt-10 mb-6">Course Statistics</h2>
             <div class="bg-white shadow-lg rounded-lg p-6">
                 <p><strong>Total Courses:</strong> <?= htmlspecialchars($stats['total_courses']) ?></p>

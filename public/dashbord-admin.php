@@ -182,8 +182,6 @@ session_start();
     }
     ?>
 </section>
-
-
             <!-- Section Statistiques globales -->
             <section id="stats-section" class="bg-white p-6 rounded-lg shadow-lg">
     <h2 class="text-2xl font-semibold text-gray-800 mb-6">Statistiques globales</h2>
@@ -202,7 +200,6 @@ session_start();
             </div>
         </div>
 
-        <!-- Répartition par catégorie -->
         <div class="bg-gray-50 p-4 rounded-lg shadow-md">
             <h3 class="font-medium text-gray-700 mb-2">Répartition par catégorie</h3>
             <?php
